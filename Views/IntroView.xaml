@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="SukaliCareApp.Views.IntroView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:SukaliCareApp.ViewModels"
+    x:DataType="vm:IntroViewModel"
+    BackgroundColor="{x:StaticResource OffBlack}"
+    NavigationPage.HasNavigationBar="False"
+    Shell.NavBarIsVisible="False">
+    <Grid>
+        <Image
+            Aspect="AspectFill"
+            Source="bgintro4.jpg"
+            VerticalOptions="Start" />
+        <Grid
+            Padding="0,40,0,0"
+            RowDefinitions="auto,*,auto"
+            VerticalOptions="FillAndExpand">
+            <Grid.Background>
+                <LinearGradientBrush EndPoint="0,1">
+                    <GradientStop Offset="0" Color="{x:StaticResource OffBlack}" />
+                    <GradientStop Offset="0.7" Color="Transparent" />
+                </LinearGradientBrush>
+            </Grid.Background>
+            <Label
+                Margin="24,24,24,0"
+                Style="{x:StaticResource LabelTitle2}"
+                Text="Sukali Care"
+                TextColor="{x:StaticResource White}" />
+            <Label
+                Grid.Row="1"
+                Margin="24,16,24,0"
+                FontFamily="InterLight"
+                FontSize="18"
+                Text="Smart Glucose Monitoring Solution"
+                TextColor="{x:StaticResource White}" />
+
+            <Border
+                Grid.Row="2"
+                Padding="24,24,24,40"
+                BackgroundColor="{x:StaticResource White}"
+                Stroke="Transparent"
+                StrokeShape="RoundRectangle 24 24 0 0"
+                StrokeThickness="0">
+                <Border.Shadow>
+                    <Shadow
+                        Brush="{x:StaticResource Gray300Brush}"
+                        Radius="8"
+                        Offset="0,0" />
+                </Border.Shadow>
+                <VerticalStackLayout>
+                    <Label
+                        FontSize="20"
+                        Style="{x:StaticResource LabelTitle1}"
+                        Text="Getting Started" />
+                    <Label
+                        Margin="0,8,0,0"
+                        FontSize="17"
+                        Text="Welcome to Sukali Care, the app that helps you monitor your blood glucose levels using your smart needleless device."
+                        TextColor="{x:StaticResource Gray500}" />
+                    <Button
+                        Margin="0,24,0,0"
+                        Command="{Binding SigninCommand}"
+                        CornerRadius="20"
+                        HorizontalOptions="FillAndExpand"
+                        IsVisible="{Binding IsLoggedOut}"
+                        Style="{x:StaticResource BtnPrimary}"
+                        Text="Sign in" />
+
+                    <Button
+                        Margin="0,16,0,8"
+                        BorderWidth="1"
+                        Command="{Binding CreateAccountCommand}"
+                        CornerRadius="20"
+                        IsVisible="{Binding IsLoggedOut}"
+                        Style="{x:StaticResource BtnPrimaryOutline}"
+                        Text="Create account" />
+
+                    <ActivityIndicator
+                        Grid.Row="5"
+                        HorizontalOptions="Center"
+                        IsRunning="True"
+                        IsVisible="{Binding IsBusy}"
+                        VerticalOptions="Center"
+                        Color="{x:StaticResource Primary}" />
+                </VerticalStackLayout>
+            </Border>
+
+        </Grid>
+    </Grid>
+</ContentPage>

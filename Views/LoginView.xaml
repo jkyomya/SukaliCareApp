@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="SukaliCareApp.Views.LoginView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:input="clr-namespace:InputKit.Shared.Controls;assembly=InputKit.Maui"
+    xmlns:m="clr-namespace:UraniumUI.Icons.MaterialIcons;assembly=UraniumUI.Icons.MaterialIcons"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:validation="clr-namespace:InputKit.Shared.Validations;assembly=InputKit.Maui"
+    xmlns:vm="clr-namespace:SukaliCareApp.ViewModels"
+    x:DataType="vm:LoginViewModel"
+    Shell.NavBarIsVisible="False">
+    <ScrollView>
+        <FlexLayout Direction="Column" JustifyContent="SpaceBetween">
+            <VerticalStackLayout Margin="16">
+                <Image
+                    Margin="0,32,0,0"
+                    HeightRequest="128"
+                    Source="sukalilogo.png"
+                    WidthRequest="128" />
+                <Label
+                    HorizontalOptions="Center"
+                    Style="{x:StaticResource LabelTitle1}"
+                    Text="Sukali Care" />
+                <Label
+                    Margin="0,4,0,24"
+                    FontSize="16"
+                    HorizontalOptions="Center"
+                    Text="Revolutionizing diabetes care"
+                    TextColor="{x:StaticResource Primary}" />
+            </VerticalStackLayout>
+
+            <Border
+                Padding="24,32,24,32"
+                BackgroundColor="{x:StaticResource White}"
+                Stroke="Transparent"
+                StrokeShape="RoundRectangle 24 24 0 0"
+                StrokeThickness="0"
+                VerticalOptions="EndAndExpand">
+                <Border.Shadow>
+                    <Shadow
+                        Brush="{x:StaticResource Gray200Brush}"
+                        Radius="8"
+                        Offset="0,0" />
+                </Border.Shadow>
+                <input:FormView>
+                    <Label
+                        Padding="0,0,0,24"
+                        FontSize="18"
+                        HorizontalOptions="Center"
+                        Text="Sign in to your account" />
+
+                    <material:TextField
+                        Title="Email"
+                        Margin="0,0,0,8"
+                        Icon="{FontImageSource FontFamily=MaterialRegular,
+                                               Glyph={x:Static m:MaterialRegular.Email}}"
+                        Text="{Binding Email}">
+
+                        <validation:RequiredValidation />
+                    </material:TextField>
+
+                    <material:TextField
+                        Title="Password"
+                        Margin="0,0,0,16"
+                        Icon="{FontImageSource FontFamily=MaterialRegular,
+                                               Glyph={x:Static m:MaterialRegular.Lock}}"
+                        IsPassword="True"
+                        Text="{Binding Password}">
+                        <validation:RequiredValidation />
+                    </material:TextField>
+                    <Label
+                        Margin="0,0,0,8"
+                        HorizontalOptions="End"
+                        Style="{x:StaticResource LabelDark}"
+                        Text="Forgot password?"
+                        TextColor="{x:StaticResource Primary}">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ResetPasswordCommand}" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                    <ActivityIndicator
+                        Margin="16"
+                        IsRunning="{Binding IsBusy}"
+                        IsVisible="{Binding IsBusy}"
+                        Color="{x:StaticResource Primary}" />
+                    <Button
+                        Margin="0,16,0,0"
+                        Command="{Binding LoginCommand}"
+                        Style="{x:StaticResource BtnPrimary}"
+                        Text="Sign in" />
+                    <Button
+                        Margin="0,16,0,8"
+                        Command="{Binding CreateAccountCommand}"
+                        Style="{x:StaticResource BtnPrimaryOutline}"
+                        Text="Create new account" />
+                    <!--<Frame
+                        Margin="0,0,0,8"
+                        Padding="8"
+                        BackgroundColor="{x:StaticResource White}"
+                        BorderColor="{x:StaticResource Gray600}"
+                        CornerRadius="20"
+                        HasShadow="False">
+                        <Grid ColumnDefinitions="0.2*,0.8*">
+                            <Image
+                                HeightRequest="24"
+                                Source="google.png"
+                                WidthRequest="24" />
+                            <Label
+                                Grid.Column="1"
+                                Margin="16,0,0,0"
+                                Text="Sign in with Google"
+                                VerticalOptions="Center" />
+                        </Grid>
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding LoginWithGoogleCommand}" />
+                        </Frame.GestureRecognizers>
+                    </Frame>-->
+                </input:FormView>
+            </Border>
+        </FlexLayout>
+    </ScrollView>
+</ContentPage>

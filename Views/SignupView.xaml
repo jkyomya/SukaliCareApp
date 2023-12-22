@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="SukaliCareApp.Views.SignupView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:input="clr-namespace:InputKit.Shared.Controls;assembly=InputKit.Maui"
+    xmlns:m="clr-namespace:UraniumUI.Icons.MaterialIcons;assembly=UraniumUI.Icons.MaterialIcons"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:validation="clr-namespace:InputKit.Shared.Validations;assembly=InputKit.Maui"
+    xmlns:vm="clr-namespace:SukaliCareApp.ViewModels"
+    Title="Create new account"
+    x:DataType="vm:SignupViewModel">
+    <ScrollView Padding="0,4,0,0">
+        <FlexLayout Direction="Column" JustifyContent="SpaceBetween">
+            <VerticalStackLayout Margin="16">
+                <Image
+                    HeightRequest="120"
+                    HorizontalOptions="Center"
+                    Source="sukalilogo.png"
+                    WidthRequest="120" />
+                <Label
+                    FontAttributes="Bold"
+                    HorizontalOptions="Center"
+                    Style="{x:StaticResource LabelTitle1}"
+                    Text="Sukali Care" />
+                <Label
+                    Margin="0,4,0,24"
+                    FontSize="16"
+                    HorizontalOptions="Center"
+                    Text="Revolutionizing diabetes care"
+                    TextColor="{x:StaticResource Primary}" />
+            </VerticalStackLayout>
+
+            <Border
+                Padding="24,16,24,32"
+                BackgroundColor="{x:StaticResource White}"
+                Stroke="Transparent"
+                StrokeShape="RoundRectangle 24 24 0 0"
+                StrokeThickness="0"
+                VerticalOptions="EndAndExpand">
+                <Border.Shadow>
+                    <Shadow
+                        Brush="{x:StaticResource Gray200Brush}"
+                        Radius="8"
+                        Offset="0,0" />
+                </Border.Shadow>
+                <input:FormView SubmitCommand="{Binding CreateAccountCommand}">
+                    <Label
+                        FontSize="18"
+                        Style="{x:StaticResource LabelTitle2}"
+                        Text="Let's get you started" />
+                    <Label Margin="0,8,0,16" Text="Step 1: Link this account to your email to secure your data" />
+                    <material:TextField
+                        Title="Email address"
+                        Margin="0,0,0,8"
+                        Icon="{FontImageSource FontFamily=MaterialRegular,
+                                               Glyph={x:Static m:MaterialRegular.Email}}"
+                        Text="{Binding Email}">
+                        <validation:RequiredValidation />
+                        <validation:RegexValidation Pattern="{x:Static input:AdvancedEntry.REGEX_EMAIL}" />
+                    </material:TextField>
+
+                    <material:TextField
+                        Title="Create a password"
+                        Margin="0,0,0,8"
+                        Icon="{FontImageSource FontFamily=MaterialRegular,
+                                               Glyph={x:Static m:MaterialRegular.Lock}}"
+                        IsPassword="True"
+                        Text="{Binding Password}">
+                        <validation:RequiredValidation />
+                    </material:TextField>
+                    <material:TextField
+                        Title="Repeat to confirm password"
+                        Margin="0,0,0,24"
+                        Icon="{FontImageSource FontFamily=MaterialRegular,
+                                               Glyph={x:Static m:MaterialRegular.Lock}}"
+                        IsPassword="True"
+                        Text="{Binding ConfirmPassword}">
+                        <validation:RequiredValidation />
+                    </material:TextField>
+                    <ActivityIndicator
+                        Margin="8"
+                        IsRunning="{Binding IsBusy}"
+                        IsVisible="{Binding IsBusy}"
+                        Color="{x:StaticResource Primary}" />
+                    <Button
+                        Margin="0,8,0,16"
+                        input:FormView.IsSubmitButton="True"
+                        Style="{x:StaticResource BtnPrimary}"
+                        Text="Proceed" />
+                    <Button
+                        Command="{Binding BackToLoginCommand}"
+                        Style="{x:StaticResource BtnPrimaryOutline}"
+                        Text="Sign in instead" />
+                </input:FormView>
+            </Border>
+        </FlexLayout>
+    </ScrollView>
+</ContentPage>

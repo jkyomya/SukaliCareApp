@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="SukaliCareApp.Views.PreferencesView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:converter="clr-namespace:SukaliCareApp.Converters"
+    xmlns:m="clr-namespace:UraniumUI.Icons.MaterialIcons;assembly=UraniumUI.Icons.MaterialIcons"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:vm="clr-namespace:SukaliCareApp.ViewModels"
+    Title="User Preferences"
+    x:DataType="vm:PreferencesViewModel"
+    BackgroundColor="{x:StaticResource White}">
+    <ContentPage.Resources>
+        <converter:BoolSwitchConverter x:Key="BoolSwitchConverter" />
+    </ContentPage.Resources>
+    <ScrollView Padding="16">
+        <VerticalStackLayout>
+            <Label
+                Grid.Column="1"
+                FontAttributes="Bold"
+                Style="{x:StaticResource LabelDark}"
+                Text="Your profile" />
+            <Label
+                Grid.Row="1"
+                Grid.Column="1"
+                FontFamily="Roboto"
+                Style="{x:StaticResource LabelDark}"
+                Text="{Binding UserDetails.FullName, StringFormat='Name: {0}'}" />
+            <Label
+                Grid.Row="2"
+                Grid.Column="1"
+                FontSize="14"
+                Style="{x:StaticResource LabelDark}"
+                Text="{Binding UserDetails.Email, StringFormat='Email: {0}'}" />
+            <Label
+                Grid.Row="3"
+                Grid.Column="1"
+                FontSize="14"
+                Style="{x:StaticResource LabelDark}"
+                Text="{Binding UserDetails.Phone, StringFormat='Phone: {0}'}" />
+            <BoxView
+                Margin="0,8,0,4"
+                BackgroundColor="{x:StaticResource Gray100}"
+                HeightRequest="2"
+                HorizontalOptions="Fill" />
+            <!--<Grid
+                Margin="0,16,0,0"
+                ColumnDefinitions="0.5*,0.5*"
+                ColumnSpacing="10">
+                <Button Style="{x:StaticResource BtnPrimary}" Text="Edit profile" />
+                <Button
+                    Grid.Column="1"
+                    BackgroundColor="IndianRed"
+                    CornerRadius="20"
+                    Text="Delete account"
+                    TextColor="White" />
+            </Grid>-->
+            <Label
+                Margin="0,16,0,0"
+                FontAttributes="Bold"
+                Style="{x:StaticResource LabelDark}"
+                Text="Preferences" />
+            <VerticalStackLayout Margin="0" Padding="0">
+                <Label
+                    Margin="0,8,0,0"
+                    Style="{x:StaticResource LabelDark}"
+                    Text="Display glucose units" />
+                <Label
+                    Margin="0,4,0,8"
+                    FontSize="14"
+                    Style="{x:StaticResource LabelDark}"
+                    Text="{Binding Units, TargetNullValue='Undefined'}"
+                    TextColor="{x:StaticResource Gray400}" />
+                <VerticalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding ChangeUnitsCommand}" />
+                </VerticalStackLayout.GestureRecognizers>
+            </VerticalStackLayout>
+            <BoxView
+                Margin="0,0,0,0"
+                BackgroundColor="{x:StaticResource Gray100}"
+                HeightRequest="1"
+                HorizontalOptions="FillAndExpand" />
+            <VerticalStackLayout Margin="0" Padding="0">
+                <Label
+                    Margin="0,8,0,0"
+                    Style="{x:StaticResource LabelDark}"
+                    Text="Data Sync frequency" />
+                <Label
+                    Margin="0,4,0,8"
+                    FontSize="14"
+                    Style="{x:StaticResource LabelDark}"
+                    Text="{Binding SetDuration, StringFormat='Every {0} minutes'}"
+                    TextColor="{x:StaticResource Gray400}" />
+                <VerticalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding ChangeFrequencyCommand}" />
+                </VerticalStackLayout.GestureRecognizers>
+            </VerticalStackLayout>
+            <BoxView
+                Margin="0,0,0,0"
+                BackgroundColor="{x:StaticResource Gray100}"
+                HeightRequest="1"
+                HorizontalOptions="FillAndExpand" />
+            <Grid ColumnDefinitions="0.7*,0.1*" RowDefinitions="auto,auto">
+                <Label
+                    Margin="0,8,0,0"
+                    Style="{x:StaticResource LabelDark}"
+                    Text="Notifications" />
+                <Label
+                    Grid.Row="1"
+                    Margin="0,4,0,8"
+                    FontSize="14"
+                    Style="{x:StaticResource LabelDark}"
+                    Text="{Binding AllowNotifications, Converter={converter:BoolSwitchConverter}, StringFormat='Turned {0}'}"
+                    TextColor="{x:StaticResource Gray400}" />
+                <Switch
+                    Grid.RowSpan="2"
+                    Grid.Column="1"
+                    HorizontalOptions="End"
+                    IsToggled="{Binding AllowNotifications}"
+                    OnColor="{x:StaticResource Primary}" />
+            </Grid>
+            <BoxView
+                Margin="0,0,0,0"
+                BackgroundColor="{x:StaticResource Gray100}"
+                HeightRequest="1"
+                HorizontalOptions="FillAndExpand" />
+            <Grid ColumnDefinitions="0.7*,0.1*" RowDefinitions="auto,auto">
+                <Label
+                    Margin="0,8,0,0"
+                    Style="{x:StaticResource LabelDark}"
+                    Text="Auto connect to device" />
+                <Label
+                    Grid.Row="1"
+                    Margin="0,4,0,8"
+                    FontSize="14"
+                    Style="{x:StaticResource LabelDark}"
+                    Text="{Binding AllowAutoConnect, Converter={converter:BoolSwitchConverter}, StringFormat='Turned {0}'}"
+                    TextColor="{x:StaticResource Gray400}" />
+                <Switch
+                    Grid.RowSpan="2"
+                    Grid.Column="1"
+                    HorizontalOptions="End"
+                    IsToggled="{Binding AllowAutoConnect}"
+                    OnColor="{x:StaticResource Primary}" />
+            </Grid>
+            <BoxView
+                Margin="0,0,0,0"
+                BackgroundColor="{x:StaticResource Gray100}"
+                HeightRequest="1"
+                HorizontalOptions="FillAndExpand" />
+            <VerticalStackLayout Margin="0" Padding="0">
+                <Label
+                    Margin="0,8,0,0"
+                    Style="{x:StaticResource LabelDark}"
+                    Text="Privacy policy and Terms of service" />
+                <Label
+                    Margin="0,4,0,8"
+                    FontSize="14"
+                    Style="{x:StaticResource LabelDark}"
+                    Text="Read terms of service"
+                    TextColor="{x:StaticResource Gray400}" />
+                <VerticalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding ViewTermsCommand}" />
+                </VerticalStackLayout.GestureRecognizers>
+            </VerticalStackLayout>
+
+            <BoxView
+                Margin="0,0,0,0"
+                BackgroundColor="{x:StaticResource Gray100}"
+                HeightRequest="1"
+                HorizontalOptions="FillAndExpand" />
+            <VerticalStackLayout>
+                <Label
+                    Margin="0,8,0,0"
+                    Style="{x:StaticResource LabelDark}"
+                    Text="Give feedback" />
+                <Label
+                    Margin="0,4,0,8"
+                    FontSize="14"
+                    Style="{x:StaticResource LabelDark}"
+                    Text="Help us make the product better"
+                    TextColor="{x:StaticResource Gray400}" />
+                <VerticalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding SubmitFeedbackCommand}" />
+                </VerticalStackLayout.GestureRecognizers>
+            </VerticalStackLayout>
+
+            <BoxView
+                Margin="0,0,0,0"
+                BackgroundColor="{x:StaticResource Gray100}"
+                HeightRequest="1"
+                HorizontalOptions="FillAndExpand" />
+
+            <VerticalStackLayout>
+                <Label
+                    Margin="0,8,0,0"
+                    Style="{x:StaticResource LabelDark}"
+                    Text="Update application" />
+                <Label
+                    Margin="0,4,0,8"
+                    FontSize="14"
+                    Style="{x:StaticResource LabelDark}"
+                    Text="Version 1.1.0"
+                    TextColor="{x:StaticResource Gray400}" />
+                <VerticalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding SubmitFeedbackCommand}" />
+                </VerticalStackLayout.GestureRecognizers>
+            </VerticalStackLayout>
+
+            <BoxView
+                Margin="0,0,0,0"
+                BackgroundColor="{x:StaticResource Gray100}"
+                HeightRequest="1"
+                HorizontalOptions="FillAndExpand" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="SukaliCareApp.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:SukaliCareApp.Views"
+    xmlns:m="clr-namespace:UraniumUI.Icons.MaterialIcons;assembly=UraniumUI.Icons.MaterialIcons"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material">
+
+    <TabBar>
+        <ShellContent ContentTemplate="{DataTemplate local:IntroView}" Route="IntroView" />
+    </TabBar>
+
+    <TabBar>
+        <ShellContent ContentTemplate="{DataTemplate local:LoginView}" Route="LoginView" />
+    </TabBar>
+    <TabBar>
+        <ShellContent ContentTemplate="{DataTemplate local:CompleteAccountView}" Route="CompleteAccountView" />
+    </TabBar>
+    <TabBar>
+        <ShellContent
+            Title="Home"
+            ContentTemplate="{DataTemplate local:DashboardView}"
+            Icon="{FontImageSource FontFamily=MaterialRegular,
+                                   Glyph={x:Static m:MaterialRegular.Home}}"
+            Route="DashboardView" />
+        <ShellContent
+            Title="Readings"
+            ContentTemplate="{DataTemplate local:ReadingsView}"
+            Icon="{FontImageSource FontFamily=MaterialRegular,
+                                   Glyph={x:Static m:MaterialRegular.Electric_meter}}"
+            Route="ReadingsView" />
+        <ShellContent
+            Title="Devices"
+            ContentTemplate="{DataTemplate local:DevicesView}"
+            Icon="{FontImageSource FontFamily=MaterialRegular,
+                                   Glyph={x:Static m:MaterialRegular.Watch}}"
+            Route="DevicesView" />
+        <ShellContent
+            Title="Feeds"
+            ContentTemplate="{DataTemplate local:LibraryView}"
+            Icon="{FontImageSource FontFamily=MaterialRegular,
+                                   Glyph={x:Static m:MaterialRegular.My_library_books}}"
+            Route="LibraryView" />
+        <ShellContent
+            Title="Settings"
+            ContentTemplate="{DataTemplate local:PreferencesView}"
+            Icon="{FontImageSource FontFamily=MaterialRegular,
+                                   Glyph={x:Static m:MaterialRegular.Tune}}"
+            Route="PreferencesView" />
+
+    </TabBar>
+
+</Shell>

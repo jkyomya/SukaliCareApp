@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="SukaliCareApp.Views.CompleteAccountView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:input="clr-namespace:InputKit.Shared.Controls;assembly=InputKit.Maui"
+    xmlns:m="clr-namespace:UraniumUI.Icons.MaterialIcons;assembly=UraniumUI.Icons.MaterialIcons"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:validation="clr-namespace:InputKit.Shared.Validations;assembly=InputKit.Maui"
+    xmlns:vm="clr-namespace:SukaliCareApp.ViewModels"
+    Title="Finish setup"
+    x:DataType="vm:CompleteAccountViewModel">
+    <ScrollView>
+        <FlexLayout Direction="Column" JustifyContent="SpaceBetween">
+            <VerticalStackLayout Margin="16">
+                <Image
+                    HeightRequest="128"
+                    Source="sukalilogo.png"
+                    WidthRequest="128" />
+                <Label
+                    HorizontalOptions="Center"
+                    Style="{x:StaticResource LabelTitle1}"
+                    Text="Sukali Care" />
+                <Label
+                    Margin="0,4,0,24"
+                    FontSize="16"
+                    HorizontalOptions="Center"
+                    Text="Revolutionizing diabetes care"
+                    TextColor="{x:StaticResource Primary}" />
+            </VerticalStackLayout>
+
+            <Border
+                Padding="24"
+                BackgroundColor="{x:StaticResource White}"
+                Stroke="Transparent"
+                StrokeShape="RoundRectangle 24 24 0 0"
+                StrokeThickness="0"
+                VerticalOptions="EndAndExpand">
+                <Border.Shadow>
+                    <Shadow
+                        Brush="{x:StaticResource Gray200Brush}"
+                        Radius="8"
+                        Offset="0,0" />
+                </Border.Shadow>
+                <input:FormView SubmitCommand="{Binding SubmitDetailsCommand}">
+                    <Label
+                        FontSize="18"
+                        Style="{x:StaticResource LabelTitle2}"
+                        Text="You're almost done" />
+                    <Label
+                        Margin="0,8,0,16"
+                        FontSize="16"
+                        Text="Step 2: Tell us a little about yourself to help us personalize the experience" />
+                    <material:TextField
+                        Title="What is your first name?"
+                        Margin="0,0,0,8"
+                        Icon="{FontImageSource FontFamily=MaterialRegular,
+                                               Glyph={x:Static m:MaterialRegular.Person}}"
+                        Text="{Binding Firstname}">
+                        <validation:RequiredValidation />
+                    </material:TextField>
+                    <material:TextField
+                        Title="What is your last name?"
+                        Margin="0,0,0,8"
+                        Icon="{FontImageSource FontFamily=MaterialRegular,
+                                               Glyph={x:Static m:MaterialRegular.Person}}"
+                        Text="{Binding Lastname}">
+                        <validation:RequiredValidation />
+                    </material:TextField>
+
+                    <material:TextField
+                        Title="Phone number"
+                        Margin="0,0,0,8"
+                        Icon="{FontImageSource FontFamily=MaterialRegular,
+                                               Glyph={x:Static m:MaterialRegular.Phone}}"
+                        Text="{Binding Phone}">
+                        <validation:RequiredValidation />
+                        <validation:RegexValidation Pattern="{x:Static input:AdvancedEntry.REGEX_PHONE}" />
+                    </material:TextField>
+                    <material:DatePickerField
+                        Title="What is your date of birth?"
+                        Margin="0,0,0,8"
+                        Date="{Binding Dob}"
+                        Icon="{FontImageSource FontFamily=MaterialRegular,
+                                               Glyph={x:Static m:MaterialRegular.Calendar_month}}">
+                        <validation:RequiredValidation />
+                    </material:DatePickerField>
+                    <ActivityIndicator
+                        Margin="8"
+                        IsRunning="{Binding IsBusy}"
+                        IsVisible="{Binding IsBusy}"
+                        Color="{x:StaticResource Primary}" />
+                    <Button
+                        Margin="0,16,0,16"
+                        input:FormView.IsSubmitButton="True"
+                        Style="{x:StaticResource BtnPrimary}"
+                        Text="Finish" />
+                </input:FormView>
+            </Border>
+
+        </FlexLayout>
+    </ScrollView>
+</ContentPage>

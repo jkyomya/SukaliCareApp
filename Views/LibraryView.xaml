@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="SukaliCareApp.Views.LibraryView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:converter="clr-namespace:SukaliCareApp.Converters"
+    xmlns:m="clr-namespace:UraniumUI.Icons.MaterialIcons;assembly=UraniumUI.Icons.MaterialIcons"
+    xmlns:model="clr-namespace:SukaliCareApp.Models"
+    xmlns:vm="clr-namespace:SukaliCareApp.ViewModels"
+    Title="Health posts"
+    x:DataType="vm:LibraryViewModel"
+    BackgroundColor="{x:StaticResource White}">
+    <RefreshView
+        Padding="16,0,16,16"
+        Command="{Binding RefreshingCommand}"
+        IsRefreshing="{Binding IsBusy}"
+        RefreshColor="{x:StaticResource Primary}">
+        <CollectionView ItemsSource="{Binding Resources}">
+            <CollectionView.EmptyView>
+                <ContentView>
+                    <VerticalStackLayout VerticalOptions="Start">
+                        <Image
+                            Margin="0,24,0,0"
+                            HorizontalOptions="Center"
+                            Source="nodata.png"
+                            VerticalOptions="Start"
+                            WidthRequest="300" />
+                        <Label
+                            FontAttributes="Italic"
+                            FontSize="14"
+                            HorizontalOptions="Center"
+                            HorizontalTextAlignment="Center"
+                            Style="{x:StaticResource LabelDark}"
+                            Text="No resources have been posted yet"
+                            TextColor="{x:StaticResource Gray300}" />
+                    </VerticalStackLayout>
+                </ContentView>
+            </CollectionView.EmptyView>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="model:LibResource">
+                    <Grid
+                        Padding="16,0,16,4"
+                        ColumnDefinitions="auto,1*,1*"
+                        RowDefinitions="*,1*,1*,1*,1*">
+                        <Image
+                            Grid.ColumnSpan="3"
+                            HorizontalOptions="Fill"
+                            MinimumHeightRequest="200"
+                            Source="{Binding Thumbnail, FallbackValue='dotnet_bot.png', TargetNullValue='dotnet_bot.png'}" />
+                        <Label
+                            Grid.Row="1"
+                            Grid.ColumnSpan="3"
+                            Padding="0,8,0,8"
+                            FontSize="16"
+                            Style="{x:StaticResource LabelTitle2}"
+                            Text="{Binding Title}" />
+                        <Label
+                            Grid.Row="2"
+                            Grid.ColumnSpan="3"
+                            Margin="0,0,0,8"
+                            FontSize="16"
+                            Text="{Binding Description}" />
+                        <Image
+                            Grid.Row="3"
+                            Margin="0,0,8,0"
+                            HeightRequest="18"
+                            HorizontalOptions="Start"
+                            Source="{FontImageSource FontFamily=MaterialRound,
+                                                     Glyph={x:Static m:MaterialRound.Calendar_month},
+                                                     Color={x:StaticResource Gray500}}"
+                            VerticalOptions="Center" />
+                        <Label
+                            Grid.Row="3"
+                            Grid.Column="1"
+                            Text="{Binding PublishedOn, StringFormat='Posted {0} ago', Converter={converter:DateToDurationConverter}}"
+                            TextColor="{x:StaticResource Gray400}"
+                            VerticalOptions="Center" />
+                        <Button
+                            Grid.Row="3"
+                            Grid.Column="2"
+                            Margin="0,8,0,8"
+                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:LibraryViewModel}}, Path=ReadMoreCommand}"
+                            CommandParameter="{Binding .}"
+                            HorizontalOptions="End"
+                            MinimumWidthRequest="150"
+                            Style="{x:StaticResource BtnPrimary}"
+                            Text="Read more" />
+                        <BoxView
+                            Grid.Row="4"
+                            Grid.ColumnSpan="3"
+                            Margin="0,8,0,0"
+                            BackgroundColor="{x:StaticResource Gray100}"
+                            HeightRequest="3"
+                            HorizontalOptions="Fill" />
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </RefreshView>
+</ContentPage>

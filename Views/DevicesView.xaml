@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="SukaliCareApp.Views.DevicesView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:SukaliCareApp.ViewModels"
+    Title="Configure devices"
+    Padding="16"
+    x:DataType="vm:DeviceMgtViewModel"
+    BackgroundColor="{x:StaticResource White}">
+    <RefreshView>
+        <CollectionView>
+            <CollectionView.Header>
+                <ContentView>
+                    <Grid ColumnDefinitions="0.6*,0.4*">
+                        <Label
+                            Style="{x:StaticResource LabelDark}"
+                            Text="Connected devices"
+                            TextColor="{x:StaticResource Gray600}"
+                            VerticalOptions="Center" />
+                        <Button
+                            Grid.Column="1"
+                            Command="{Binding ScanDevicesCommand}"
+                            Style="{x:StaticResource BtnPrimary}"
+                            Text="Scan" />
+                    </Grid>
+                </ContentView>
+            </CollectionView.Header>
+            <CollectionView.EmptyView>
+                <ContentView>
+                    <VerticalStackLayout VerticalOptions="Start">
+                        <Image
+                            Margin="0,24,0,0"
+                            HorizontalOptions="Center"
+                            Source="noconnection.png"
+                            VerticalOptions="Center"
+                            WidthRequest="300" />
+                        <Label
+                            FontAttributes="Italic"
+                            FontSize="14"
+                            HorizontalOptions="Center"
+                            Style="{x:StaticResource LabelDark}"
+                            Text="No connected smart devices"
+                            TextColor="{x:StaticResource Gray300}"
+                            VerticalOptions="Center" />
+                    </VerticalStackLayout>
+                </ContentView>
+            </CollectionView.EmptyView>
+        </CollectionView>
+    </RefreshView>
+</ContentPage>
