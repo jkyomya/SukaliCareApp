@@ -1,8 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.companyname.sukalicareapp" android:versionName="Alpha">
 	<application android:allowBackup="true" android:supportsRtl="true" android:label="Sukali Care" android:icon="@mipmap/appicon"></application>
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	<uses-permission android:name="android.permission.INTERNET" />
+  <uses-feature android:name="android.permission.BLUETOOTH_LE" android:required="false" />
 	<uses-permission android:name="android.permission.BLUETOOTH" />
 	<uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 	<uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
@@ -17,5 +18,9 @@
 	<uses-permission android:name="android.permission.WRITE_CALENDAR" />
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 	<uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+	<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+	<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 	<uses-sdk android:minSdkVersion="21" android:targetSdkVersion="34" />
 </manifest>

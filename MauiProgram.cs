@@ -1,10 +1,10 @@
 ﻿using InputKit.Handlers;
-using Microsoft.Extensions.Logging;
 using Mopups.Hosting;
 using Mopups.Services;
+using Plugin.BLE;
+using Plugin.BLE.Abstractions.Contracts;
 using Shiny;
 using Shiny.BluetoothLE;
-using SukaliCareApp.Data;
 using SkiaSharp.Views.Maui.Controls.Hosting;
 
 namespace SukaliCareApp
@@ -20,6 +20,7 @@ namespace SukaliCareApp
                 .UseUraniumUIMaterial()
                 .UseMauiCommunityToolkit()
                 .UseSkiaSharp()
+                .UseShiny()
                 .RegisterServices()
                 .ConfigureMopups()
                 .ConfigureMauiHandlers(handlers=> handlers.AddInputKitHandlers())
@@ -37,21 +38,24 @@ namespace SukaliCareApp
             builder.UseLocalNotification();
 #endif
 
-#if DEBUG
-            builder.Logging.AddDebug();
-#endif
-
             return builder.Build();
         }
 
         public static MauiAppBuilder RegisterServices(this MauiAppBuilder builder)
         {
-            builder.Services.AddDbContext<AppDbContext>(ServiceLifetime.Scoped);
             builder.Services.AddScoped<CgmDataService>();
             builder.Services.AddScoped<FirebaseService>();
             builder.Services.AddSingleton(MopupService.Instance);
             builder.Services.AddTransient<HttpProxyService>();
+
+#if ANDROID || IOS
             builder.Services.AddScoped<AppNotificationService>();
+#endif
+            builder.Services.AddSingleton<IBluetoothLE>(CrossBluetoothLE.Current);
+            builder.Services.AddSingleton<IAdapter>(CrossBluetoothLE.Current.Adapter);
+            builder.Services.AddSingleton<IBluetoothService, BluetoothService>();
+            builder.Services.AddBluetoothLE();
+
 
             return builder;
         }
@@ -60,6 +64,7 @@ namespace SukaliCareApp
             builder.Services.AddScoped<CGMReadingsViewModel>();
             builder.Services.AddTransient<DashboardViewModel>();
             builder.Services.AddTransient<DeviceMgtViewModel>();
+            builder.Services.AddScoped<AddDeviceViewModel>();
             builder.Services.AddScoped<LibraryViewModel>();
             builder.Services.AddTransient<PreferencesViewModel>();
             builder.Services.AddTransient<SignupViewModel>();

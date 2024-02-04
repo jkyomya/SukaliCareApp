@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:Animations="clr-namespace:Mopups.Animations;assembly=Mopups"
     xmlns:Mopups="clr-namespace:Mopups.Pages;assembly=Mopups"
+    xmlns:model="clr-namespace:SukaliCareApp.Models"
     xmlns:vm="clr-namespace:SukaliCareApp.ViewModels"
     x:DataType="vm:AddDeviceViewModel"
     BackgroundColor="#80000000"
@@ -35,11 +36,25 @@
                     Margin="0,8,0,8"
                     HeightRequest="1"
                     HorizontalOptions="CenterAndExpand" />
+                <CollectionView ItemsSource="{Binding ScannedDevices}" MinimumHeightRequest="128">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="model:CGMDevice">
+                            <VerticalStackLayout>
+                                <Label Text="{Binding DeviceName}" />
+                                <Label Text="{Binding Uuid}" />
+                                <BoxView
+                                    Margin="0,8,0,8"
+                                    HeightRequest="1"
+                                    HorizontalOptions="CenterAndExpand" />
+                            </VerticalStackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
                 <ActivityIndicator
                     Margin="16"
                     HorizontalOptions="Center"
-                    IsRunning="True"
-                    IsVisible="True"
+                    IsRunning="{Binding IsScanning}"
+                    IsVisible="{Binding IsScanning}"
                     VerticalOptions="Center"
                     Color="{x:StaticResource Primary}" />
                 <Grid ColumnDefinitions="0.5*,0.5*" ColumnSpacing="10">

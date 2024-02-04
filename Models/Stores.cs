@@ -8,10 +8,11 @@ namespace SukaliCareApp.Models
 {
     public static class Stores
     {
-        public static string preferenceStore = "UserPreferences";
-        public static string userDetailsStore = "UserDetails";
-        public static string firebaseUserAccountStore = "firebaseAccount";
-        public static string completedAccountStore = "completedAccount";
-        public static string isLoggedInStore = "isUserLoggedIn";
+        public const string preferenceStore = "UserPreferences";
+        public const string userDetailsStore = "UserDetails";
+        public const string firebaseUserAccountStore = "firebaseAccount";
+        public const string completedAccountStore = "completedAccount";
+        public const string isLoggedInStore = "isUserLoggedIn";
+        public const string cgmDeviceStore = "cgmDevices";
     }
 }

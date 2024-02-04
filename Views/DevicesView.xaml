@@ -3,20 +3,26 @@
     x:Class="SukaliCareApp.Views.DevicesView"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:model="clr-namespace:SukaliCareApp.Models"
     xmlns:vm="clr-namespace:SukaliCareApp.ViewModels"
     Title="Configure devices"
     Padding="16"
-    x:DataType="vm:DeviceMgtViewModel"
-    BackgroundColor="{x:StaticResource White}">
-    <RefreshView>
-        <CollectionView>
+    x:DataType="vm:DeviceMgtViewModel">
+    <RefreshView Command="{Binding ScanAllDevicesCommand}" IsRefreshing="{Binding IsRefreshing}">
+        <CollectionView ItemsSource="{Binding ScannedDevices}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="model:CGMDevice">
+                    <VerticalStackLayout>
+                        <Label Text="{Binding DeviceName}" />
+                    </VerticalStackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
             <CollectionView.Header>
                 <ContentView>
                     <Grid ColumnDefinitions="0.6*,0.4*">
                         <Label
                             Style="{x:StaticResource LabelDark}"
                             Text="Connected devices"
-                            TextColor="{x:StaticResource Gray600}"
                             VerticalOptions="Center" />
                         <Button
                             Grid.Column="1"
@@ -41,7 +47,6 @@
                             HorizontalOptions="Center"
                             Style="{x:StaticResource LabelDark}"
                             Text="No connected smart devices"
-                            TextColor="{x:StaticResource Gray300}"
                             VerticalOptions="Center" />
                     </VerticalStackLayout>
                 </ContentView>

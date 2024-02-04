@@ -8,13 +8,11 @@
     xmlns:model="clr-namespace:SukaliCareApp.Models"
     xmlns:vm="clr-namespace:SukaliCareApp.ViewModels"
     Title="Health posts"
-    x:DataType="vm:LibraryViewModel"
-    BackgroundColor="{x:StaticResource White}">
+    x:DataType="vm:LibraryViewModel">
     <RefreshView
         Padding="16,0,16,16"
         Command="{Binding RefreshingCommand}"
-        IsRefreshing="{Binding IsBusy}"
-        RefreshColor="{x:StaticResource Primary}">
+        IsRefreshing="{Binding IsBusy}">
         <CollectionView ItemsSource="{Binding Resources}">
             <CollectionView.EmptyView>
                 <ContentView>
@@ -89,7 +87,8 @@
                             Grid.Row="4"
                             Grid.ColumnSpan="3"
                             Margin="0,8,0,0"
-                            BackgroundColor="{x:StaticResource Gray100}"
+                            BackgroundColor="{AppThemeBinding Light={x:StaticResource Gray100},
+                                                              Dark={x:StaticResource Gray400}}"
                             HeightRequest="3"
                             HorizontalOptions="Fill" />
                     </Grid>

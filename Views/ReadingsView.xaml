@@ -10,192 +10,137 @@
     xmlns:model="clr-namespace:SukaliCareApp.Models"
     xmlns:vm="clr-namespace:SukaliCareApp.ViewModels"
     Title="Glucose Readings"
-    x:DataType="vm:CGMReadingsViewModel"
-    BackgroundColor="{x:StaticResource White}">
+    x:DataType="vm:CGMReadingsViewModel">
     <RefreshView Command="{Binding RefreshingCommand}" IsRefreshing="{Binding IsBusy}">
         <ScrollView>
+            <VerticalStackLayout Padding="16,8,16,16">
 
-            <VerticalStackLayout Padding="16">
-                <Border
-                    Margin="0,0,0,24"
-                    Padding="16,10,10,10"
-                    BackgroundColor="{Binding LatestReading.GlucoseValue, Converter={converter:ValueToColorConvert}, FallbackValue={x:StaticResource Primary}}"
-                    Stroke="Transparent"
-                    StrokeThickness="0"
-                    Style="{x:StaticResource BorderRounded}">
-                    <Border.Shadow>
-                        <Shadow
-                            Brush="{x:StaticResource Gray100Brush}"
-                            Radius="4"
-                            Offset="0,0" />
-                    </Border.Shadow>
-                    <Grid ColumnDefinitions="1*,0.2*" RowDefinitions="1*,1*,1*">
-                        <Image
-                            Grid.RowSpan="3"
-                            Grid.Column="1"
-                            HeightRequest="32"
-                            HorizontalOptions="Start"
-                            Source="{FontImageSource FontFamily=MaterialRound,
-                                                     Glyph={x:Static m:MaterialRound.Multiline_chart},
-                                                     Color={x:StaticResource White}}"
-                            VerticalOptions="Center" />
-                        <Label
-                            Style="{x:StaticResource LabelDark}"
-                            Text="Latest reading"
-                            TextColor="{x:StaticResource White}" />
-                        <Label
-                            Grid.Row="1"
-                            Padding="0,2,0,2"
-                            FontAttributes="Bold"
-                            Style="{x:StaticResource LabelDark}"
-                            Text="{Binding LatestReading.GlucoseValue, Converter={converter:UnitsConveter}, TargetNullValue='No reading', FallbackValue='No new reading'}"
-                            TextColor="{x:StaticResource White}" />
-                        <Label
-                            Grid.Row="2"
-                            FontSize="12"
-                            Style="{x:StaticResource LabelDark}"
-                            Text="{Binding LatestReading.ReadingDate, Converter={converter:DateToDurationConverter}, TargetNullValue='--', FallbackValue='Waiting for device...'}"
-                            TextColor="{x:StaticResource White}" />
-                    </Grid>
-                </Border>
-                <HorizontalStackLayout Margin="0,0,0,8">
-                    <Image
-                        Margin="0,0,10,0"
-                        HeightRequest="18"
-                        Source="{FontImageSource FontFamily=MaterialRound,
-                                                 Glyph={x:Static m:MaterialRound.Line_axis},
-                                                 Color={x:StaticResource Gray500}}" />
-                    <Label
-                        FontAttributes="Bold"
-                        FontSize="16"
-                        Style="{x:StaticResource LabelDark}"
-                        Text="Overview chart" />
-                </HorizontalStackLayout>
-                <Border
-                    Margin="0,0,0,24"
-                    Padding="0"
-                    Style="{x:StaticResource BorderRounded}">
-                    <Border.Shadow>
-                        <Shadow
-                            Brush="{x:StaticResource Gray300Brush}"
-                            Radius="2"
-                            Offset="0,0" />
-                    </Border.Shadow>
-                    <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
-                        <ActivityIndicator
-                            IsRunning="{Binding IsBusy}"
-                            IsVisible="{Binding IsBusy}"
-                            Color="{x:StaticResource Primary}" />
-                        <FlexLayout
-                            AlignContent="Stretch"
-                            Direction="Row"
-                            JustifyContent="Center">
-                            <chart:CartesianChart
-                                FlexLayout.Basis="100%"
-                                MinimumHeightRequest="250"
-                                Series="{Binding Series}"
-                                XAxes="{Binding XAxes}"
-                                YAxes="{Binding YAxes}"
-                                Sections="{Binding Sections}"
-                                DrawMargin="{Binding DrawMargin}"
-                                ZoomMode="Both" />
-                        </FlexLayout>
-                    </VerticalStackLayout>
-                </Border>
-
-                <HorizontalStackLayout Margin="0,0,0,8">
-                    <Image
-                        Grid.Row="3"
-                        Margin="0,0,10,0"
-                        HeightRequest="18"
-                        Source="{FontImageSource FontFamily=MaterialRound,
-                                                 Glyph={x:Static m:MaterialRound.Bar_chart},
-                                                 Color={x:StaticResource Gray500}}" />
-                    <Label
-                        FontAttributes="Bold"
-                        FontSize="16"
-                        Style="{x:StaticResource LabelDark}"
-                        Text="Recent readings" />
-                </HorizontalStackLayout>
-                <BoxView
-                    Margin="0,0,0,8"
-                    BackgroundColor="{x:StaticResource Gray100}"
-                    HeightRequest="3"
-                    HorizontalOptions="Fill" />
-
-                <CollectionView ItemsSource="{Binding Items}">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="model:CgmReading">
-
+                <material:TabView>
+                    <material:TabItem Title="Trends chart">
+                        <material:TabItem.Content>
                             <Grid
-                                Padding="8,0,8,8"
-                                ColumnDefinitions="0.1*,0.8*,auto"
-                                ColumnSpacing="6"
-                                RowDefinitions="1*,1*,1*">
-                                <Image
-                                    Grid.RowSpan="2"
-                                    Margin="0,0,10,0"
-                                    HeightRequest="24"
-                                    Source="{FontImageSource FontFamily=MaterialRound,
-                                                             Glyph={x:Static m:MaterialRound.Water_drop},
-                                                             Color={Binding Path='GlucoseValue',
-                                                                            Converter={converter:ValueToColorConvert}}}" />
-                                <Label
-                                    Grid.Column="1"
-                                    FontSize="12"
-                                    Style="{x:StaticResource LabelDark}"
-                                    Text="{Binding ReadingDate, Converter={converter:DateToStringConverter}}"
-                                    TextColor="{x:StaticResource Gray500}" />
-                                <Label
-                                    Grid.Row="1"
-                                    Grid.Column="1"
-                                    FontAttributes="Bold"
-                                    FontSize="16"
-                                    Style="{x:StaticResource LabelDark}"
-                                    Text="{Binding GlucoseValue, Converter={converter:UnitsConveter}, FallbackValue='Not available'}" />
-                                <Label
-                                    Grid.Row="1"
-                                    Grid.Column="2"
-                                    FontSize="12"
-                                    Style="{x:StaticResource LabelDark}"
-                                    Text="{Binding ReadingDate, Converter={converter:DateToDurationConverter}}"
-                                    TextColor="{x:StaticResource Gray500}" />
-
-                                <BoxView
-                                    Grid.Row="2"
-                                    Grid.Column="1"
-                                    Grid.ColumnSpan="2"
-                                    Margin="0,8,0,0"
-                                    BackgroundColor="{x:StaticResource Gray100}"
-                                    HeightRequest="1" />
+                                Margin="0,8,0,0"
+                                ColumnDefinitions="*"
+                                RowDefinitions="*">
+                                <Border>
+                                    <chart:CartesianChart
+                                        DrawMargin="{Binding DrawMargin}"
+                                        FlexLayout.Basis="100%"
+                                        MinimumHeightRequest="450"
+                                        Sections="{Binding Sections}"
+                                        Series="{Binding Series}"
+                                        XAxes="{Binding XAxes}"
+                                        YAxes="{Binding YAxes}"
+                                        ZoomMode="Both" />
+                                </Border>
                             </Grid>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                    <CollectionView.EmptyView>
-                        <ContentView>
-                            <VerticalStackLayout VerticalOptions="Start">
-                                <Image
-                                    HorizontalOptions="Center"
-                                    Source="empty.png"
-                                    VerticalOptions="Start"
-                                    WidthRequest="300" />
-                                <Label
-                                    FontAttributes="Italic"
-                                    FontSize="14"
-                                    HorizontalOptions="Center"
-                                    Style="{x:StaticResource LabelDark}"
-                                    Text="No data has been received yet"
-                                    TextColor="{x:StaticResource Gray300}" />
-                                <Button
-                                    Margin="16"
-                                    CornerRadius="20"
-                                    HorizontalOptions="Center"
-                                    Style="{x:StaticResource BtnPrimary}"
-                                    Text="Configure devices" />
-                            </VerticalStackLayout>
-                        </ContentView>
-                    </CollectionView.EmptyView>
-                </CollectionView>
+                            <!--<Border
+                                Margin="0,16,0,24"
+                                Padding="0"
+                                Style="{x:StaticResource BorderRounded}">
+                                <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="FillAndExpand">
+                                    <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+                                    <FlexLayout
+                                        AlignContent="Stretch"
+                                        JustifyContent="Center">
+                                        <chart:CartesianChart
+                                            DrawMargin="{Binding DrawMargin}"
+                                            FlexLayout.Basis="100%"
+                                            MinimumHeightRequest="250"
+                                            Sections="{Binding Sections}"
+                                            Series="{Binding Series}"
+                                            XAxes="{Binding XAxes}"
+                                            YAxes="{Binding YAxes}"
+                                            ZoomMode="Both" />
+                                    </FlexLayout>
+                                </VerticalStackLayout>
+                            </Border>-->
+                        </material:TabItem.Content>
+                    </material:TabItem>
+
+                    <material:TabItem Title="Readings">
+                        <material:TabItem.Content>
+                            <Grid Padding="0,12,0,0">
+                                <CollectionView ItemsSource="{Binding Items}">
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate x:DataType="model:CgmReading">
+
+                                            <Grid
+                                                Padding="8,0,8,8"
+                                                ColumnDefinitions="0.1*,0.8*,auto"
+                                                ColumnSpacing="6"
+                                                RowDefinitions="1*,1.5*,1*">
+                                                <Image
+                                                    Grid.RowSpan="2"
+                                                    Margin="0,0,10,0"
+                                                    HeightRequest="24"
+                                                    Source="{FontImageSource FontFamily=MaterialRound,
+                                                                             Glyph={x:Static m:MaterialRound.Water_drop},
+                                                                             Color={Binding Path='GlucoseValue',
+                                                                                            Converter={converter:ValueToColorConvert}}}" />
+                                                <Label
+                                                    Grid.Column="1"
+                                                    FontSize="12"
+                                                    Style="{x:StaticResource LabelDark}"
+                                                    Text="{Binding ReadingDate, Converter={converter:DateToStringConverter}}"
+                                                    TextColor="{AppThemeBinding Light={x:StaticResource Gray500},
+                                                                                Dark={x:StaticResource Gray100}}" />
+                                                <Label
+                                                    Grid.Row="1"
+                                                    Grid.Column="1"
+                                                    FontAttributes="Bold"
+                                                    FontSize="16"
+                                                    Style="{x:StaticResource LabelDark}"
+                                                    Text="{Binding GlucoseValue, Converter={converter:UnitsConveter}, FallbackValue='Not available'}" />
+                                                <Label
+                                                    Grid.Row="1"
+                                                    Grid.Column="2"
+                                                    FontSize="12"
+                                                    Style="{x:StaticResource LabelDark}"
+                                                    Text="{Binding ReadingDate, Converter={converter:DateToDurationConverter}}"
+                                                    TextColor="{AppThemeBinding Light={x:StaticResource Gray500},
+                                                                                Dark={x:StaticResource Gray100}}" />
+
+                                                <BoxView
+                                                    Grid.Row="2"
+                                                    Grid.Column="1"
+                                                    Grid.ColumnSpan="2"
+                                                    Margin="0,8,0,0"
+                                                    BackgroundColor="{AppThemeBinding Light={x:StaticResource Gray100},
+                                                                                      Dark={x:StaticResource Gray500}}"
+                                                    HeightRequest="1" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                    <CollectionView.EmptyView>
+                                        <ContentView>
+                                            <VerticalStackLayout VerticalOptions="Start">
+                                                <Image
+                                                    HorizontalOptions="Center"
+                                                    Source="empty.png"
+                                                    VerticalOptions="Start"
+                                                    WidthRequest="300" />
+                                                <Label
+                                                    FontAttributes="Italic"
+                                                    FontSize="14"
+                                                    HorizontalOptions="Center"
+                                                    Style="{x:StaticResource LabelDark}"
+                                                    Text="No data has been received yet"
+                                                    TextColor="{x:StaticResource Gray300}" />
+                                                <Button
+                                                    Margin="16"
+                                                    CornerRadius="20"
+                                                    HorizontalOptions="Center"
+                                                    Style="{x:StaticResource BtnPrimary}"
+                                                    Text="Configure devices" />
+                                            </VerticalStackLayout>
+                                        </ContentView>
+                                    </CollectionView.EmptyView>
+                                </CollectionView>
+                            </Grid>
+                        </material:TabItem.Content>
+                    </material:TabItem>
+                </material:TabView>
 
             </VerticalStackLayout>
 

@@ -10,7 +10,13 @@ using System.Reactive.Linq;
 
 namespace SukaliCareApp.ViewModels;
 
-public partial class CGMReadingsViewModel(CgmDataService service, AppNotificationService notificationService) : BaseViewModel
+public partial class CGMReadingsViewModel(
+    CgmDataService service
+#if ANDROID || IOS
+    , AppNotificationService notificationService
+#endif
+    )
+    : BaseViewModel
 {
     [ObservableProperty]
     string currentMonth = DateTime.Today.ToString("MMMM");
@@ -23,7 +29,10 @@ public partial class CGMReadingsViewModel(CgmDataService service, AppNotificatio
         new DateTimeAxis(TimeSpan.FromMinutes(1), date => date.ToString("ddd h:mm tt"))
         {
             ShowSeparatorLines = true,
-            SeparatorsPaint = new SolidColorPaint(SKColors.LightSlateGray)
+            SeparatorsPaint = new SolidColorPaint(
+                Application.Current.RequestedTheme == AppTheme.Light ?
+                    SKColors.LightSlateGray :
+                    SKColors.White)
             {
                 StrokeThickness = 1,
                 PathEffect = new DashEffect([3f, 3f], 1)                
@@ -37,15 +46,15 @@ public partial class CGMReadingsViewModel(CgmDataService service, AppNotificatio
         new Axis
         {
             ShowSeparatorLines = true,
-            SeparatorsPaint = new SolidColorPaint(SKColors.LightSlateGray)
+            SeparatorsPaint = new SolidColorPaint(
+                Application.Current.RequestedTheme == AppTheme.Light ?
+                    SKColors.LightSlateGray : 
+                    SKColors.White)
             {
                 StrokeThickness = 1,
                 PathEffect = new DashEffect([2f, 2f])
             },
-            TextSize = 10,
-            Name = "Glucose levels",
-            NamePaint = new SolidColorPaint(SKColors.LightGray),
-            NameTextSize = 12,
+            TextSize = 12,
             MinStep = 2,
             SubseparatorsCount = 4,
             SubseparatorsPaint = new SolidColorPaint(new SKColor(235,235,235,76)),

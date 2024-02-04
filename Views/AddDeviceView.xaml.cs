@@ -12,4 +12,10 @@ public partial class AddDeviceView : PopupPage
         this.viewModel = viewModel;
         BindingContext = viewModel;
     }
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+       await viewModel.ScanDevices();
+    }
 }

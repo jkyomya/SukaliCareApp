@@ -1,5 +1,8 @@
 ﻿
 
+using CommunityToolkit.Maui.Alerts;
+using System.Diagnostics;
+
 namespace SukaliCareApp.ViewModels
 {
     public partial class IntroViewModel : BaseViewModel
@@ -9,7 +12,9 @@ namespace SukaliCareApp.ViewModels
 
         public async Task OnAppearing()
         {
-            UserPreferences pref = new UserPreferences()
+            try
+            {
+                UserPreferences pref = new()
             {
                 SyncFrequency = 10,
                 AllowAutoConnect = true,
@@ -18,21 +23,31 @@ namespace SukaliCareApp.ViewModels
             };
             Preferences.Set(Stores.preferenceStore, JsonConvert.SerializeObject(pref));
 
-            //IsBusy = true;
-            //if (Preferences.ContainsKey(Stores.userDetailsStore))
-            //{
-            //    await Shell.Current.GoToAsync($"//{nameof(DashboardView)}");
-            //}
-            //else if (Preferences.ContainsKey(Stores.firebaseUserAccountStore))
-            //{
-            //    await Shell.Current.GoToAsync($"//{nameof(CompleteAccountView)}");
-            //}
-            //else
-            //{
-            //    IsLoggedOut = true;
-            //}
+            IsBusy = true;
+                if (Preferences.ContainsKey(Stores.userDetailsStore))
+                {
+                    await Task.Delay(1000);
 
-            //IsBusy = false;
+                    await Shell.Current.GoToAsync($"//{nameof(DashboardView)}");
+                }
+                else if (Preferences.ContainsKey(Stores.firebaseUserAccountStore))
+                {
+                    await Shell.Current.GoToAsync($"//{nameof(CompleteAccountView)}");
+                }
+                else
+                {
+                    IsLoggedOut = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Error", ex.Message, "Ok");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+
         }
 
         [RelayCommand]

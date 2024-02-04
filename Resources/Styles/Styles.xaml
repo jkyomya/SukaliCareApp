@@ -187,11 +187,21 @@
     </Style>
 
     <Style x:Key="BorderRounded" TargetType="Border">
-        <Setter Property="Stroke" Value="Transparent" />
-        <Setter Property="StrokeThickness" Value="0" />
+        <Setter Property="Stroke" Value="{AppThemeBinding Light={StaticResource Gray300Brush}, Dark={StaticResource Gray500Brush}}" />
+        <Setter Property="StrokeThickness" Value="0.7" />
         <Setter Property="StrokeShape" Value="RoundRectangle 8" />
         <Setter Property="Padding" Value="8" />
-        <Setter Property="BackgroundColor" Value="{StaticResource White}" />
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray950}}" />
+        <Setter Property="Shadow">
+            <Setter.Value>
+                <Shadow
+                    Brush="{AppThemeBinding Light={StaticResource Gray400Brush},
+                                            Dark=transparent}"
+                    Opacity="0.5"
+                    Radius="6"
+                    Offset="0,0" />
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <Style TargetType="Frame">
@@ -222,25 +232,25 @@
         </Setter>
     </Style>
     <Style x:Key="LabelDark" TargetType="Label">
-        <Setter Property="TextColor" Value="{StaticResource Gray600}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource White}}" />
         <Setter Property="FontSize" Value="16" />
         <Setter Property="FontFamily" Value="InterRegular" />
     </Style>
 
     <Style x:Key="LabelTitle1" TargetType="Label">
-        <Setter Property="TextColor" Value="{StaticResource Gray600}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray100}}" />
         <Setter Property="FontSize" Value="32" />
         <Setter Property="FontFamily" Value="InterBold" />
     </Style>
 
     <Style x:Key="LabelTitle2" TargetType="Label">
-        <Setter Property="TextColor" Value="{StaticResource Gray600}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray100}}" />
         <Setter Property="FontSize" Value="24" />
         <Setter Property="FontFamily" Value="InterSemiBold" />
     </Style>
 
     <Style TargetType="Label">
-        <Setter Property="TextColor" Value="{StaticResource Gray600}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray100}}" />
         <Setter Property="BackgroundColor" Value="Transparent" />
         <Setter Property="FontFamily" Value="InterRegular" />
         <Setter Property="FontSize" Value="14" />
@@ -473,24 +483,24 @@
 
     <Style ApplyToDerivedTypes="True" TargetType="Page">
         <Setter Property="Padding" Value="0" />
-        <Setter Property="BackgroundColor" Value="{StaticResource Background}" />
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Background}, Dark={StaticResource OffBlack}}" />
     </Style>
 
     <Style ApplyToDerivedTypes="True" TargetType="Shell">
-        <Setter Property="Shell.BackgroundColor" Value="{StaticResource Primary}" />
+        <Setter Property="Shell.BackgroundColor" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Black}}" />
         <Setter Property="Shell.ForegroundColor" Value="{OnPlatform WinUI={StaticResource Primary}, Default={StaticResource White}}" />
         <Setter Property="Shell.TitleColor" Value="{StaticResource White}" />
         <Setter Property="Shell.DisabledColor" Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray950}}" />
         <Setter Property="Shell.UnselectedColor" Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray200}}" />
         <Setter Property="Shell.NavBarHasShadow" Value="False" />
-        <Setter Property="Shell.TabBarBackgroundColor" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Primary}}" />
+        <Setter Property="Shell.TabBarBackgroundColor" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Black}}" />
         <Setter Property="Shell.TabBarForegroundColor" Value="{AppThemeBinding Light={StaticResource Secondary}, Dark={StaticResource Secondary}}" />
         <Setter Property="Shell.TabBarTitleColor" Value="{AppThemeBinding Light={StaticResource Secondary}, Dark={StaticResource Secondary}}" />
-        <Setter Property="Shell.TabBarUnselectedColor" Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray200}}" />
+        <Setter Property="Shell.TabBarUnselectedColor" Value="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray400}}" />
     </Style>
 
     <Style TargetType="NavigationPage">
-        <Setter Property="BarBackgroundColor" Value="{StaticResource White}" />
+        <Setter Property="BarBackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource OffBlack}}" />
         <Setter Property="BarTextColor" Value="{StaticResource Gray600}" />
         <Setter Property="IconColor" Value="{StaticResource Gray500}" />
     </Style>

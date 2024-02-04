@@ -44,7 +44,7 @@
                         Radius="8"
                         Offset="0,0" />
                 </Border.Shadow>
-                <input:FormView SubmitCommand="{Binding CreateAccountCommand}">
+                <input:FormView>
                     <Label
                         FontSize="18"
                         Style="{x:StaticResource LabelTitle2}"
@@ -85,7 +85,7 @@
                         Color="{x:StaticResource Primary}" />
                     <Button
                         Margin="0,8,0,16"
-                        input:FormView.IsSubmitButton="True"
+                        Command="{Binding CreateAccountCommand}"
                         Style="{x:StaticResource BtnPrimary}"
                         Text="Proceed" />
                     <Button

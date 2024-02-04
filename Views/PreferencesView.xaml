@@ -8,8 +8,7 @@
     xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
     xmlns:vm="clr-namespace:SukaliCareApp.ViewModels"
     Title="User Preferences"
-    x:DataType="vm:PreferencesViewModel"
-    BackgroundColor="{x:StaticResource White}">
+    x:DataType="vm:PreferencesViewModel">
     <ContentPage.Resources>
         <converter:BoolSwitchConverter x:Key="BoolSwitchConverter" />
     </ContentPage.Resources>

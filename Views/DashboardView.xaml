@@ -10,7 +10,6 @@
     xmlns:vm="clr-namespace:SukaliCareApp.ViewModels"
     Title="DashboardView"
     x:DataType="vm:DashboardViewModel"
-    BackgroundColor="{x:StaticResource Background}"
     Shell.NavBarIsVisible="False">
     <ContentPage.Resources>
         <converter:BoolToConnectionConverter x:Key="BoolToConnection" />
@@ -20,12 +19,12 @@
             <FlexLayout Direction="Column">
                 <Grid
                     Padding="16,24,16,48"
-                    BackgroundColor="{x:StaticResource Primary}"
+                    BackgroundColor="{AppThemeBinding Light={x:StaticResource Primary},
+                                                      Dark={x:StaticResource Gray950}}"
                     ColumnDefinitions="0.2*,0.7*"
                     RowDefinitions="auto,auto,auto">
                     <Border
                         Grid.RowSpan="3"
-                        BackgroundColor="White"
                         HeightRequest="60"
                         HorizontalOptions="Start"
                         Stroke="Transparent"
@@ -43,13 +42,11 @@
                         Grid.Column="1"
                         FontSize="24"
                         Style="{x:StaticResource LabelTitle2}"
-                        Text="Hello"
-                        TextColor="{x:StaticResource Secondary}" />
+                        Text="Hello" />
                     <Label
                         Grid.Row="1"
                         Grid.Column="1"
-                        FontSize="18"
-                        TextColor="{x:StaticResource White}">
+                        FontSize="18">
                         <Label.Text>
                             <MultiBinding StringFormat="{}{0} {1}">
                                 <Binding
@@ -64,22 +61,13 @@
                         Grid.Row="2"
                         Grid.Column="1"
                         FontSize="14"
-                        Style="{x:StaticResource LabelDark}"
-                        Text="{Binding UserDetails.Email, FallbackValue='Not logged in'}"
-                        TextColor="{x:StaticResource White}" />
+                        Text="{Binding UserDetails.Email, FallbackValue='Not logged in'}" />
                 </Grid>
                 <Border
                     Grid.Row="1"
                     Margin="8,-16,8,8"
                     Padding="16"
-                    BackgroundColor="{x:StaticResource White}"
                     Style="{x:StaticResource BorderRounded}">
-                    <Border.Shadow>
-                        <Shadow
-                            Brush="{x:StaticResource Gray400Brush}"
-                            Radius="6"
-                            Offset="0,0" />
-                    </Border.Shadow>
                     <Grid ColumnDefinitions="1*,0.2*" RowDefinitions="auto,auto,auto">
                         <Label
                             FontSize="16"
@@ -99,7 +87,6 @@
                         <Label
                             Grid.Row="2"
                             FontSize="14"
-                            Style="{x:StaticResource LabelDark}"
                             Text="{Binding Device.LastConneted, StringFormat='{}Active for {0}', Converter={converter:DateToDurationConverter}, FallbackValue='Waiting for connection ...'}"
                             TextColor="{x:StaticResource PrimaryGradientStop}" />
                         <Image
@@ -109,7 +96,8 @@
                             HorizontalOptions="Start"
                             Source="{FontImageSource FontFamily=MaterialRound,
                                                      Glyph={x:Static m:MaterialRound.Bluetooth_connected},
-                                                     Color={x:StaticResource Primary}}"
+                                                     Color={AppThemeBinding Light={x:StaticResource Primary},
+                                                                            Dark=LightGreen}}"
                             VerticalOptions="Center" />
                     </Grid>
                 </Border>
@@ -123,13 +111,10 @@
                         HeightRequest="24"
                         Source="{FontImageSource FontFamily=MaterialRound,
                                                  Glyph={x:Static m:MaterialRound.Insights},
-                                                 Color={x:StaticResource Gray500}}"
+                                                 Color={AppThemeBinding Light={x:StaticResource Gray500},
+                                                                        Dark={x:StaticResource White}}}"
                         VerticalOptions="Start" />
-                    <Label
-                        Grid.Column="1"
-                        Style="{x:StaticResource LabelDark}"
-                        Text="Quick insights"
-                        TextColor="{x:StaticResource Gray500}" />
+                    <Label Grid.Column="1" Text="Quick insights" />
                     <Border
                         Grid.Row="1"
                         Grid.ColumnSpan="2"
@@ -137,24 +122,17 @@
                         Padding="0"
                         HeightRequest="65"
                         Style="{x:StaticResource BorderRounded}">
-                        <Border.Shadow>
-                            <Shadow
-                                Brush="{x:StaticResource Gray300Brush}"
-                                Radius="4"
-                                Offset="0,0" />
-                        </Border.Shadow>
-                        <Grid ColumnDefinitions="auto,1*,0.2*" RowDefinitions="auto,auto">
+                        <Grid ColumnDefinitions="auto,1*,0.2*" RowDefinitions="*,*">
                             <BoxView
                                 Grid.RowSpan="2"
-                                BackgroundColor="{x:StaticResource Primary}"
-                                VerticalOptions="FillAndExpand"
+                                BackgroundColor="{AppThemeBinding Light={x:StaticResource Primary},
+                                                                  Dark=lightGreen}"
                                 WidthRequest="8" />
                             <ActivityIndicator
                                 Grid.RowSpan="2"
                                 Grid.Column="2"
                                 IsRunning="{Binding IsBusy}"
-                                IsVisible="{Binding IsBusy}"
-                                Color="{x:StaticResource Primary}" />
+                                IsVisible="{Binding IsBusy}" />
                             <Image
                                 Grid.RowSpan="2"
                                 Grid.Column="2"
@@ -162,7 +140,8 @@
                                 IsVisible="{Binding IsCompleted}"
                                 Source="{FontImageSource FontFamily=MaterialRound,
                                                          Glyph={x:Static m:MaterialRound.Chevron_right},
-                                                         Color={x:StaticResource Success}}"
+                                                         Color={AppThemeBinding Light={x:StaticResource Success},
+                                                                                Dark={x:StaticResource White}}}"
                                 VerticalOptions="Center" />
                             <Label
                                 Grid.Row="1"
@@ -170,7 +149,6 @@
                                 Margin="10,0,0,0"
                                 FontSize="17"
                                 HorizontalOptions="Start"
-                                Style="{x:StaticResource LabelDark}"
                                 Text="{Binding HighestReading.GlucoseValue, Converter={converter:UnitsConveter}, FallbackValue='Unavailable', TargetNullValue='Unavailable'}"
                                 TextColor="{x:StaticResource Error}"
                                 VerticalOptions="Start" />
@@ -180,7 +158,6 @@
                                 Margin="10,0,0,0"
                                 Padding="0,8,0,0"
                                 Text="{Binding HighestReading.ReadingDate, StringFormat='Highest glucose reading ({0} ago)', Converter={converter:DateToDurationConverter}, FallbackValue='Highest glucose reading'}"
-                                TextColor="{x:StaticResource Gray500}"
                                 VerticalOptions="Center" />
                         </Grid>
                     </Border>
@@ -192,16 +169,11 @@
                         Padding="0"
                         HeightRequest="67"
                         Style="{x:StaticResource BorderRounded}">
-                        <Border.Shadow>
-                            <Shadow
-                                Brush="{x:StaticResource Gray300Brush}"
-                                Radius="4"
-                                Offset="0,0" />
-                        </Border.Shadow>
                         <Grid ColumnDefinitions="auto,1*,0.2*" RowDefinitions="1*,1*">
                             <BoxView
                                 Grid.RowSpan="2"
-                                BackgroundColor="{x:StaticResource Primary}"
+                                BackgroundColor="{AppThemeBinding Light={x:StaticResource Primary},
+                                                                  Dark=lightGreen}"
                                 WidthRequest="8" />
 
                             <Image
@@ -211,21 +183,20 @@
                                 IsVisible="{Binding IsCompleted}"
                                 Source="{FontImageSource FontFamily=MaterialRound,
                                                          Glyph={x:Static m:MaterialRound.Chevron_right},
-                                                         Color={x:StaticResource Success}}"
+                                                         Color={AppThemeBinding Light={x:StaticResource Success},
+                                                                                Dark={x:StaticResource White}}}"
                                 VerticalOptions="Center" />
                             <ActivityIndicator
                                 Grid.RowSpan="2"
                                 Grid.Column="2"
                                 IsRunning="{Binding IsBusy}"
-                                IsVisible="{Binding IsBusy}"
-                                Color="{x:StaticResource Primary}" />
+                                IsVisible="{Binding IsBusy}" />
                             <Label
                                 Grid.Row="1"
                                 Grid.Column="1"
                                 Margin="10,0,0,0"
                                 FontSize="17"
                                 HorizontalOptions="Start"
-                                Style="{x:StaticResource LabelDark}"
                                 Text="{Binding LastReading.GlucoseValue, Converter={converter:UnitsConveter}, FallbackValue='Unavailable', TargetNullValue='Unavailable'}"
                                 TextColor="{x:StaticResource Success}"
                                 VerticalOptions="Start" />
@@ -235,7 +206,6 @@
                                 Margin="10,0,0,0"
                                 Padding="0,8,0,0"
                                 Text="{Binding LastReading.ReadingDate, StringFormat='Lowest glucose reading ({0} ago)', Converter={converter:DateToDurationConverter}, FallbackValue='Lowest glucose reading', TargetNullValue='Lowest glucose reading'}"
-                                TextColor="{x:StaticResource Gray500}"
                                 VerticalOptions="Center" />
                         </Grid>
                     </Border>
@@ -244,31 +214,21 @@
                         HeightRequest="24"
                         Source="{FontImageSource FontFamily=MaterialRound,
                                                  Glyph={x:Static m:MaterialRound.Bar_chart},
-                                                 Color={x:StaticResource Gray500}}"
+                                                 Color={AppThemeBinding Light={x:StaticResource Gray500},
+                                                                        Dark={x:StaticResource White}}}"
                         VerticalOptions="Start" />
                     <Label
                         Grid.Row="3"
                         Grid.Column="1"
-                        Style="{x:StaticResource LabelDark}"
-                        Text="Recent trends (Weekly)"
-                        TextColor="{x:StaticResource Gray500}" />
+                        Text="Recent trends (Weekly)" />
 
                     <Border
                         Grid.Row="4"
                         Grid.ColumnSpan="2"
                         Margin="0,8,0,16"
                         Style="{x:StaticResource BorderRounded}">
-                        <Border.Shadow>
-                            <Shadow
-                                Brush="{x:StaticResource Gray300Brush}"
-                                Radius="4"
-                                Offset="0,0" />
-                        </Border.Shadow>
                         <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
-                            <ActivityIndicator
-                                IsRunning="{Binding IsBusy}"
-                                IsVisible="{Binding IsBusy}"
-                                Color="{x:StaticResource Primary}" />
+                            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
                             <!--<Label
                                 FontSize="12"
                                 HorizontalOptions="Center"

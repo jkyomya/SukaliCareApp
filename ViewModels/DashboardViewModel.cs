@@ -12,7 +12,14 @@ using LiveChartsCore.Defaults;
 
 namespace SukaliCareApp.ViewModels;
 
-public partial class DashboardViewModel(CgmDataService dataService, AppNotificationService notificationService) : BaseViewModel
+public partial class DashboardViewModel(
+    CgmDataService dataService
+#if ANDROID || IOS
+    ,
+    AppNotificationService notificationService
+#endif
+    ) 
+    : BaseViewModel
 {
     [ObservableProperty]
     AppUser userDetails;

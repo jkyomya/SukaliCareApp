@@ -1,8 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net8.0-android;net8.0-ios</TargetFrameworks>
-		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>
+		<TargetFrameworks>net8.0-ios;net8.0-android34.0</TargetFrameworks>
 		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
 		<!-- <TargetFrameworks>$(TargetFrameworks);net8.0-tizen</TargetFrameworks> -->
 
@@ -41,12 +40,14 @@
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-android|AnyCPU'">
 	  <ApplicationTitle>Sukali Care</ApplicationTitle>
 	  <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
-	  <RunAOTCompilation>True</RunAOTCompilation>
+	  <RunAOTCompilation>False</RunAOTCompilation>
 	  <TrimMode>copyused</TrimMode>
 	  <Optimize>True</Optimize>
 	  <AndroidStoreUncompressedFileExtensions>.svg;.png;.jpg</AndroidStoreUncompressedFileExtensions>
-	  <PublishTrimmed>True</PublishTrimmed>
+	  <PublishTrimmed>False</PublishTrimmed>
 	  <AndroidEnableProfiledAot>False</AndroidEnableProfiledAot>
+	  <EnableLLVM>True</EnableLLVM>
+	  <AndroidEnableMultiDex>False</AndroidEnableMultiDex>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-ios|AnyCPU'">
@@ -62,10 +63,15 @@
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-android|AnyCPU'">
 	  <ApplicationTitle>Sukali Care</ApplicationTitle>
 	  <TrimMode>copyused</TrimMode>
-	  <PublishTrimmed>True</PublishTrimmed>
-	  <RunAOTCompilation>True</RunAOTCompilation>
+	  <PublishTrimmed>False</PublishTrimmed>
+	  <RunAOTCompilation>False</RunAOTCompilation>
 	  <AndroidStoreUncompressedFileExtensions>.svg;.png;.jpg</AndroidStoreUncompressedFileExtensions>
 	  <AndroidEnableProfiledAot>False</AndroidEnableProfiledAot>
+	  <AndroidPackageFormat>apk</AndroidPackageFormat>
+	  <EnableLLVM>True</EnableLLVM>
+	  <AndroidUseAapt2>True</AndroidUseAapt2>
+	  <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
+	  <AndroidEnableMultiDex>False</AndroidEnableMultiDex>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-ios|AnyCPU'">
@@ -83,6 +89,14 @@
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-windows10.0.18362.0|AnyCPU'">
 	  <ApplicationTitle>Sukali Care App</ApplicationTitle>
+	</PropertyGroup>
+
+	<PropertyGroup>
+	  <PlatformTarget>AnyCPU</PlatformTarget>
+	</PropertyGroup>
+
+	<PropertyGroup>
+	  <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.22621.0</TargetFrameworks>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -124,30 +138,33 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="CommunityToolkit.Maui" Version="7.0.0" />
+		<PackageReference Include="CommunityToolkit.Maui" Version="7.0.1" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
 		<PackageReference Include="FirebaseAdmin" Version="2.4.0" />
 		<PackageReference Include="FirebaseAuthentication.net" Version="4.1.0" />
-		<PackageReference Include="FirebaseDatabase.net" Version="4.2.0" />
 		<PackageReference Include="LiveChartsCore.SkiaSharpView.Maui" Version="2.0.0-rc2" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.0" />
-		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
-		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.6" />
+		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.6" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
-		<PackageReference Include="Mopups" Version="1.2.0" />
+		<PackageReference Include="Mopups" Version="1.3.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-		<PackageReference Include="Plugin.LocalNotification" Version="10.1.8" />
-		<PackageReference Include="ReactiveUI" Version="19.5.1" />
-		<PackageReference Include="ReactiveUI.Maui" Version="19.5.1" />
-		<PackageReference Include="Shiny.BluetoothLE" Version="3.1.2" />
-		<PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
+		<PackageReference Include="Plugin.BLE" Version="3.1.0-beta.1" />
+		<PackageReference Include="Plugin.LocalNotification" Version="11.0.1-preview01" />
+		<PackageReference Include="ReactiveUI" Version="19.5.41" />
+		<PackageReference Include="ReactiveUI.Maui" Version="19.5.41" />
+		<PackageReference Include="Shiny.BluetoothLE" Version="3.2.3" />
+		<PackageReference Include="Shiny.BluetoothLE.Common" Version="3.2.3" />
+		<PackageReference Include="Shiny.BluetoothLE.Hosting" Version="3.2.3" />
+		<PackageReference Include="Shiny.Core" Version="3.2.3" />
+		<PackageReference Include="Shiny.Framework" Version="4.0.0" />
+		<PackageReference Include="Shiny.Hosting.Maui" Version="3.2.3" />
+		<PackageReference Include="sqlite-net-pcl" Version="1.9.141-beta" />
 		<PackageReference Include="System.Net.Http" Version="4.3.4" />
-		<PackageReference Include="System.Reactive" Version="6.0.0" />
-		<PackageReference Include="System.Reactive.Linq" Version="6.0.0" />
-		<PackageReference Include="UraniumUI" Version="2.6.0" />
-		<PackageReference Include="UraniumUI.Icons.MaterialIcons" Version="2.6.0" />
-		<PackageReference Include="UraniumUI.Material" Version="2.6.0" />
+		<PackageReference Include="System.Reactive" Version="6.0.1-preview.1" />
+		<PackageReference Include="System.Reactive.Linq" Version="6.0.1-preview.1" />
+		<PackageReference Include="UraniumUI" Version="2.8.0-pre.2" />
+		<PackageReference Include="UraniumUI.Icons.MaterialIcons" Version="2.8.0-pre.2" />
+		<PackageReference Include="UraniumUI.Material" Version="2.8.0-pre.2" />
 	</ItemGroup>
 
 	<ItemGroup>
