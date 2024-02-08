@@ -56,6 +56,10 @@ public partial class DashboardViewModel(
                 PathEffect = new DashEffect([3f, 3f], 1)
             },
             TextSize = 10,
+            LabelsPaint = new SolidColorPaint(
+                Application.Current.RequestedTheme == AppTheme.Light ?
+                    SKColors.LightSlateGray :
+                    SKColors.White)
         },
     };
     [ObservableProperty]
@@ -76,6 +80,10 @@ public partial class DashboardViewModel(
             MinStep = 2,
             SubseparatorsCount = 4,
             SubseparatorsPaint = new SolidColorPaint(new SKColor(235,235,235,76)),
+            LabelsPaint = new SolidColorPaint(
+                Application.Current.RequestedTheme == AppTheme.Light ?
+                    SKColors.LightSlateGray :
+                    SKColors.White)
         }
     };
     ObservableCollection<DateTimePoint> ChartValues { get; } = new ObservableCollection<DateTimePoint>();

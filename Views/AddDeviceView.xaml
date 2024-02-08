@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:Animations="clr-namespace:Mopups.Animations;assembly=Mopups"
     xmlns:Mopups="clr-namespace:Mopups.Pages;assembly=Mopups"
+    xmlns:device="clr-namespace:Plugin.BLE.Abstractions.Contracts;assembly=Plugin.BLE"
     xmlns:model="clr-namespace:SukaliCareApp.Models"
     xmlns:vm="clr-namespace:SukaliCareApp.ViewModels"
     x:DataType="vm:AddDeviceViewModel"
@@ -19,11 +20,11 @@
         VerticalOptions="End">
         <Border
             Padding="24"
-            BackgroundColor="White"
             HorizontalOptions="FillAndExpand"
             Stroke="transparent"
             StrokeShape="RoundRectangle 20 20 0 0"
             StrokeThickness="0"
+            Style="{x:StaticResource BorderRounded}"
             VerticalOptions="FillAndExpand">
             <VerticalStackLayout>
                 <Label
@@ -38,10 +39,10 @@
                     HorizontalOptions="CenterAndExpand" />
                 <CollectionView ItemsSource="{Binding ScannedDevices}" MinimumHeightRequest="128">
                     <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="model:CGMDevice">
+                        <DataTemplate x:DataType="device:IDevice">
                             <VerticalStackLayout>
-                                <Label Text="{Binding DeviceName}" />
-                                <Label Text="{Binding Uuid}" />
+                                <Label Text="{Binding Name}" />
+                                <Label Text="{Binding Rssi}" />
                                 <BoxView
                                     Margin="0,8,0,8"
                                     HeightRequest="1"

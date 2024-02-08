@@ -28,22 +28,17 @@
                     FontSize="16"
                     HorizontalOptions="Center"
                     Text="Revolutionizing diabetes care"
-                    TextColor="{x:StaticResource Primary}" />
+                    TextColor="{AppThemeBinding Light={x:StaticResource Primary},
+                                                Dark=LightGreen}" />
             </VerticalStackLayout>
 
             <Border
                 Padding="24,16,24,32"
-                BackgroundColor="{x:StaticResource White}"
                 Stroke="Transparent"
                 StrokeShape="RoundRectangle 24 24 0 0"
                 StrokeThickness="0"
+                Style="{x:StaticResource BorderRounded}"
                 VerticalOptions="EndAndExpand">
-                <Border.Shadow>
-                    <Shadow
-                        Brush="{x:StaticResource Gray200Brush}"
-                        Radius="8"
-                        Offset="0,0" />
-                </Border.Shadow>
                 <input:FormView>
                     <Label
                         FontSize="18"
@@ -81,8 +76,7 @@
                     <ActivityIndicator
                         Margin="8"
                         IsRunning="{Binding IsBusy}"
-                        IsVisible="{Binding IsBusy}"
-                        Color="{x:StaticResource Primary}" />
+                        IsVisible="{Binding IsBusy}" />
                     <Button
                         Margin="0,8,0,16"
                         Command="{Binding CreateAccountCommand}"

@@ -1,9 +1,12 @@
 ﻿using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Mvvm.Messaging;
 using Mopups.Services;
+using Plugin.BLE.Abstractions.Contracts;
+using Plugin.BLE.Abstractions.Exceptions;
 using Shiny;
 using Shiny.BluetoothLE;
 using Shiny.BluetoothLE.Managed;
+using System.Diagnostics;
 using System.Reactive.Linq;
 using Permissions = Microsoft.Maui.ApplicationModel.Permissions;
 
@@ -11,19 +14,28 @@ namespace SukaliCareApp.ViewModels;
 
 public partial class AddDeviceViewModel : BaseViewModel
 {
-    private readonly IBleManager bleManager;
-    private readonly IManagedScan scanner;
+    private readonly IBluetoothService bluetoothService;
+    private readonly IAdapter adapter;
 
-    public ObservableCollection<IPeripheral> Peripherals { get; } = [];
-    public ObservableCollection<CGMDevice> ScannedDevices { get; } = [];
+    [ObservableProperty]
+    ObservableCollection<IDevice> scannedDevices = [];
 
     [ObservableProperty]
     private bool isScanning = false;
 
-    public AddDeviceViewModel(IBleManager bleManager)
+    public AddDeviceViewModel(IBluetoothService bluetoothService, IAdapter adapter)
     {
-        this.bleManager = bleManager;
-        scanner = bleManager.CreateManagedScanner();
+        this.bluetoothService = bluetoothService;
+        this.adapter = adapter;
+
+        adapter.DeviceDiscovered += (s, a) =>
+        {
+            Debug.WriteLine($"Found scanned device: {a.Device.Name}");
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                ScannedDevices.Add(a.Device);
+            });
+        };
     }
 
     
@@ -31,105 +43,29 @@ public partial class AddDeviceViewModel : BaseViewModel
     [RelayCommand]
     public async Task CloseDialog()
     {
-        scanner.Stop();
-        scanner.Dispose();
-
         await MopupService.Instance.PopAllAsync();
     }
 
     [RelayCommand]
     public async Task ScanDevices()
     {
-        var access = await bleManager.RequestAccessAsync();
-        if (access != AccessState.Available)
+        if ((await Permissions.CheckStatusAsync<Permissions.Bluetooth>()) != PermissionStatus.Granted)
         {
             await Permissions.RequestAsync<Permissions.Bluetooth>();
         }
-        //try
-        //{
-        //    IsScanning = true;
-        //    var scanSession = bleManager.Scan()
-        //        .Subscribe(result =>
-        //        {
-        //            if(!string.IsNullOrEmpty(result.Peripheral.Name))
-        //            {
-        //                MainThread.BeginInvokeOnMainThread(() =>
-        //                {
-        //                    Peripherals.Add(result.Peripheral);
-        //                    ScannedDevices.Add(new CGMDevice
-        //                    {
-        //                        DeviceId = result.Peripheral.Uuid.ToString() ?? Guid.NewGuid().ToString(),
-        //                        DeviceName = result.Peripheral.Name,
-        //                        Uuid = result.Peripheral.Uuid.ToString() ?? string.Empty
-        //                    });
-        //                });
-
-        //            }
-        //        });
-        //    scanSession.Dispose();
-        //}
-        //catch (Exception ex)
-        //{
-        //    await Shell.Current.DisplayAlert(
-        //          "Scan Error",
-        //          ex.Message,
-        //          "Ok");
-        //}
-
-        try
-        {
-            await scanner.Start(
-                new ScanConfig(),
-                result =>
-                {
-                    if (!string.IsNullOrEmpty(result.Peripheral.Name))
-                    {
-                        var peripheral = result.Peripheral;
-                        Peripherals.Add(peripheral);
-                        MainThread.BeginInvokeOnMainThread(async () =>
-                        {
-                            await Shell.Current.DisplaySnackbar($"Found {peripheral.Name}");
-                            ScannedDevices.Add(new CGMDevice
-                            {
-                                DeviceId = peripheral.Uuid.ToString() ?? Guid.NewGuid().ToString(),
-                                DeviceName = peripheral.Name,
-                                Uuid = peripheral.Uuid.ToString() ?? string.Empty
-                            });
-                        });
-
-                        return true;
-                    }
-
-                    return false;
-                },
-                RxApp.MainThreadScheduler,
-                null,
-                TimeSpan.FromSeconds(10)
-                );
-        }
-        catch (Exception ex)
-        {
-            await Shell.Current.DisplayAlert(
-                  "Scan Error",
-                  ex.Message,
-                  "Ok");
-        }
-
-        IsScanning = scanner.IsScanning;
-
-
+        IsScanning = true;
+        ScannedDevices.Clear();
+        await adapter.StartScanningForDevicesAsync();
     }
 
     [RelayCommand]
-    public void StopScan()
+    public async Task StopScan()
     {
-        scanner.Stop();
-        IsScanning = scanner.IsScanning;
-        scanner.Dispose();
+        await adapter.StopScanningForDevicesAsync();
     }
 
     [RelayCommand]
-    public async Task ConnectDevice(IPeripheral peripheral)
+    public async Task ConnectDevice(IDevice peripheral)
     {
         bool result = await Shell.Current.DisplayAlert(
             "Connect Device",
@@ -138,10 +74,9 @@ public partial class AddDeviceViewModel : BaseViewModel
         {
             try
             {
-                await peripheral.WithConnectIf(new ConnectionConfig(true))
-                    .Timeout(TimeSpan.FromSeconds(10));
+                await bluetoothService.Connect(peripheral.Name);
             }
-            catch(TimeoutException)
+            catch(DeviceConnectionException)
             {
                 await Shell.Current.DisplayAlert(
                       "Connection Error",
@@ -151,32 +86,5 @@ public partial class AddDeviceViewModel : BaseViewModel
 
     }
 
-    //[RelayCommand]
-    //public async Task PairWithDevice(IPeripheral peripheral)
-    //{
-    //    var status = peripheral.TryGetPairingStatus();
-
-    //    if (status == PairingState.NotPaired)
-    //    {
-    //        var result = await peripheral.TryPairingRequest();
-    //        if (result is not null && (bool)result)
-    //        {
-    //            await ConnectDevice(peripheral);
-
-    //            WeakReferenceMessenger.Default.Send(new CGMDevice
-    //            {
-    //                Uuid = peripheral.Uuid.ToString(),
-    //                DeviceId = peripheral.Uuid.ToString(),
-    //                DeviceName = peripheral.Name
-    //            });
-    //        }
-    //    }
-    //    else
-    //    {
-    //        await Shell.Current.DisplayAlert(
-    //              "Pairing Error",
-    //              $"Device {peripheral.Name} is already paired.", "Ok");
-    //        return;
-    //    }
-    //}
+    
 }

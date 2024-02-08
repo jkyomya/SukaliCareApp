@@ -26,22 +26,17 @@
                     FontSize="16"
                     HorizontalOptions="Center"
                     Text="Revolutionizing diabetes care"
-                    TextColor="{x:StaticResource Primary}" />
+                    TextColor="{AppThemeBinding Light={x:StaticResource Primary},
+                                                Dark=LightGreen}" />
             </VerticalStackLayout>
 
             <Border
                 Padding="24"
-                BackgroundColor="{x:StaticResource White}"
                 Stroke="Transparent"
                 StrokeShape="RoundRectangle 24 24 0 0"
                 StrokeThickness="0"
+                Style="{x:StaticResource BorderRounded}"
                 VerticalOptions="EndAndExpand">
-                <Border.Shadow>
-                    <Shadow
-                        Brush="{x:StaticResource Gray200Brush}"
-                        Radius="8"
-                        Offset="0,0" />
-                </Border.Shadow>
                 <input:FormView SubmitCommand="{Binding SubmitDetailsCommand}">
                     <Label
                         FontSize="18"
@@ -82,14 +77,14 @@
                         Margin="0,0,0,8"
                         Date="{Binding Dob}"
                         Icon="{FontImageSource FontFamily=MaterialRegular,
-                                               Glyph={x:Static m:MaterialRegular.Calendar_month}}">
+                                               Glyph={x:Static m:MaterialRegular.Calendar_month}}"
+                        MinimumDate="01/01/1950">
                         <validation:RequiredValidation />
                     </material:DatePickerField>
                     <ActivityIndicator
                         Margin="8"
                         IsRunning="{Binding IsBusy}"
-                        IsVisible="{Binding IsBusy}"
-                        Color="{x:StaticResource Primary}" />
+                        IsVisible="{Binding IsBusy}" />
                     <Button
                         Margin="0,16,0,16"
                         input:FormView.IsSubmitButton="True"

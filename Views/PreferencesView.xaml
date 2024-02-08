@@ -23,8 +23,17 @@
                 Grid.Row="1"
                 Grid.Column="1"
                 FontFamily="Roboto"
-                Style="{x:StaticResource LabelDark}"
-                Text="{Binding UserDetails.FullName, StringFormat='Name: {0}'}" />
+                Style="{x:StaticResource LabelDark}">
+                <Label.Text>
+                    <MultiBinding StringFormat="Name: {0} {1}">
+                        <Binding
+                            FallbackValue="Annonymous"
+                            Path="UserDetails.FirstName"
+                            TargetNullValue="Unknown" />
+                        <Binding FallbackValue="User" Path="UserDetails.LastName" />
+                    </MultiBinding>
+                </Label.Text>
+            </Label>
             <Label
                 Grid.Row="2"
                 Grid.Column="1"

@@ -26,8 +26,7 @@
             <Label
                 Margin="24,24,24,0"
                 Style="{x:StaticResource LabelTitle2}"
-                Text="Sukali Care"
-                TextColor="{x:StaticResource White}" />
+                Text="Sukali Care" />
             <Label
                 Grid.Row="1"
                 Margin="24,16,24,0"
@@ -39,16 +38,10 @@
             <Border
                 Grid.Row="2"
                 Padding="24,24,24,40"
-                BackgroundColor="{x:StaticResource White}"
                 Stroke="Transparent"
                 StrokeShape="RoundRectangle 24 24 0 0"
-                StrokeThickness="0">
-                <Border.Shadow>
-                    <Shadow
-                        Brush="{x:StaticResource Gray300Brush}"
-                        Radius="8"
-                        Offset="0,0" />
-                </Border.Shadow>
+                StrokeThickness="0"
+                Style="{x:StaticResource BorderRounded}">
                 <VerticalStackLayout>
                     <Label
                         FontSize="20"
@@ -57,8 +50,7 @@
                     <Label
                         Margin="0,8,0,0"
                         FontSize="17"
-                        Text="Welcome to Sukali Care, the app that helps you monitor your blood glucose levels using your smart needleless device."
-                        TextColor="{x:StaticResource Gray500}" />
+                        Text="Welcome to Sukali Care, the app that helps you monitor your blood glucose levels using your smart needleless device." />
                     <Button
                         Margin="0,24,0,0"
                         Command="{Binding SigninCommand}"
@@ -82,8 +74,7 @@
                         HorizontalOptions="Center"
                         IsRunning="True"
                         IsVisible="{Binding IsBusy}"
-                        VerticalOptions="Center"
-                        Color="{x:StaticResource Primary}" />
+                        VerticalOptions="Center" />
                 </VerticalStackLayout>
             </Border>
 

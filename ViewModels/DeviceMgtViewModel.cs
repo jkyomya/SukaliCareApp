@@ -21,6 +21,8 @@ namespace SukaliCareApp.ViewModels
         bool isRefreshing = true;
         public ObservableCollection<CGMDevice> ScannedDevices { get; } = [];
 
+        public ObservableCollection<CGMDevice> PairedDevices { get; set; } = [];
+
         public DeviceMgtViewModel(
                 CgmDataService dataService,
                 IPopupNavigation popupNavigation,
@@ -40,31 +42,43 @@ namespace SukaliCareApp.ViewModels
             {
                 OnDeviceConnected(m);
             });
+
+
+            adapter.DeviceConnected += (s, a) =>
+            {
+                Debug.WriteLine($"Found device: {a.Device.Name}");
+                PairedDevices.Add(new CGMDevice
+                {
+                    DeviceId = a.Device.Id.ToString() ?? Guid.NewGuid().ToString(),
+                    DeviceName = a.Device.Name,
+                    Uuid = a.Device.Rssi.ToString() ?? string.Empty
+                });
+            };
         }
         
-        public ObservableCollection<CGMDevice> PairedDevices { get; set; } = [];
 
         [RelayCommand]
-        public void LoadData()
+        public async Task LoadData()
         {
             if(Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>().Result != PermissionStatus.Granted)
             {
-                Permissions.RequestAsync<Permissions.LocationWhenInUse>();
+                await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
             }
             IsRefreshing = true;
-
             PairedDevices.Clear();
+            
             var devices = bluetoothService.GetConnectedDevices();
-            foreach (var item in devices)
+            foreach (var device in devices)
             {
+                Debug.WriteLine($"Device: {device.Name}");
                 PairedDevices.Add(new CGMDevice
                 {
-                    DeviceId = item.Id.ToString() ?? Guid.NewGuid().ToString(),
-                    DeviceName = item.Name,
-                    Uuid = item.Rssi.ToString() ?? string.Empty
+                    DeviceId = device.Id.ToString() ?? Guid.NewGuid().ToString(),
+                    DeviceName = device.Name,
+                    Uuid = device.Rssi.ToString() ?? string.Empty
                 });
             }
-
+            
 
             IsRefreshing = false;
         }

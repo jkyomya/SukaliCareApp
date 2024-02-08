@@ -38,6 +38,10 @@ public partial class CGMReadingsViewModel(
                 PathEffect = new DashEffect([3f, 3f], 1)                
             },
             TextSize = 10,
+            LabelsPaint = new SolidColorPaint(
+                Application.Current.RequestedTheme == AppTheme.Light ?
+                    SKColors.LightSlateGray :
+                    SKColors.White)
         },
     };
     [ObservableProperty]
@@ -58,10 +62,16 @@ public partial class CGMReadingsViewModel(
             MinStep = 2,
             SubseparatorsCount = 4,
             SubseparatorsPaint = new SolidColorPaint(new SKColor(235,235,235,76)),
+            LabelsPaint = new SolidColorPaint(
+                Application.Current.RequestedTheme == AppTheme.Light ?
+                    SKColors.LightSlateGray :
+                    SKColors.White),
+            Position = AxisPosition.End,
+            Labeler = value => value.ToString("F1")
         }
     };
 
-    public Margin DrawMargin { get; set; } = new Margin(50, 10, 8, 40);
+    public Margin DrawMargin { get; } = new Margin(8, 10, 40, 40);
     private static bool IsStandard() => JsonConvert.DeserializeObject<UserPreferences>(Preferences.Get(Stores.preferenceStore, null)).Units == "mmol/l";
     [ObservableProperty]
     RectangularSection[] sections;
@@ -96,7 +106,10 @@ public partial class CGMReadingsViewModel(
         [
             new RectangularSection()
             {
-                Fill = new SolidColorPaint(new SKColor(255, 225, 230)),
+                Fill = new SolidColorPaint(
+                    Application.Current.RequestedTheme == AppTheme.Light ?
+                     new SKColor(255, 225, 230) :
+                     SKColors.HotPink),
                 Yi = IsStandard() ? 14 : 252,
                 Yj = IsStandard() ? 42 : 756,
 
