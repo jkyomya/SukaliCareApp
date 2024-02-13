@@ -5,6 +5,7 @@ using Plugin.BLE;
 using Plugin.BLE.Abstractions.Contracts;
 using Shiny;
 using Shiny.BluetoothLE;
+using Shiny.Jobs;
 using SkiaSharp.Views.Maui.Controls.Hosting;
 
 namespace SukaliCareApp
@@ -56,6 +57,25 @@ namespace SukaliCareApp
             builder.Services.AddSingleton<IBluetoothService, BluetoothService>();
             builder.Services.AddBluetoothLE();
 
+#if __MOBILE__
+
+            JobInfo bluetoothJob = new JobInfo(
+                Identifier: "DataBackgroundJob",
+                JobType: typeof(DataBackgroundJob),
+                false,
+                new Dictionary<string, string>
+                {
+                    { "loops", "100" }
+                },
+                InternetAccess.Any,
+                false,
+                false,
+                false
+            );
+
+            builder.Services.AddJob(bluetoothJob);
+            
+#endif
 
             return builder;
         }

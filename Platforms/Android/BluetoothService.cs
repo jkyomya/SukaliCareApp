@@ -1,7 +1,5 @@
-﻿using Android.App;
-using Android.Bluetooth;
+﻿using Android.Bluetooth;
 using Android.Content;
-using Java.Lang;
 using Java.Util;
 using Plugin.BLE.Abstractions.Contracts;
 using Plugin.BLE.Android;
@@ -11,6 +9,7 @@ using Device = Plugin.BLE.Android.Device;
 namespace SukaliCareApp;
 public class BluetoothService : IBluetoothService
 {
+#nullable enable
     private readonly IAdapter adapter;
 
     static UUID? _myUuidSecure = UUID.FromString("fa87c0d0-afac-11de-8a39-0800200c9a66");

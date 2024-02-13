@@ -14,5 +14,7 @@ namespace SukaliCareApp.Models
         public const string completedAccountStore = "completedAccount";
         public const string isLoggedInStore = "isUserLoggedIn";
         public const string cgmDeviceStore = "cgmDevices";
+        public const string cgmDeviceReadingsStore = "cgmDeviceReadings";
+        public const string connectedDevice = "connectedDevice";
     }
 }

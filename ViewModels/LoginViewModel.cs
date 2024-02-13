@@ -6,8 +6,7 @@ using CommunityToolkit.Maui.Core;
 
 namespace SukaliCareApp.ViewModels
 {
-    public partial class LoginViewModel(FirebaseService firebaseService,
-        HttpProxyService httpProxy) : BaseViewModel
+    public partial class LoginViewModel(FirebaseService firebaseService) : BaseViewModel
     {
         readonly FirebaseService _firebaseService = firebaseService;
         [ObservableProperty]

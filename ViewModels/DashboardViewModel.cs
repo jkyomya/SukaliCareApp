@@ -9,17 +9,12 @@ using SkiaSharp;
 using SukaliCareApp.Converters;
 using System.Reactive.Linq;
 using LiveChartsCore.Defaults;
+using Shiny.Jobs;
+using Shiny;
 
 namespace SukaliCareApp.ViewModels;
 
-public partial class DashboardViewModel(
-    CgmDataService dataService
-#if ANDROID || IOS
-    ,
-    AppNotificationService notificationService
-#endif
-    ) 
-    : BaseViewModel
+public partial class DashboardViewModel(CgmDataService dataService, IJobManager jobManager) : BaseViewModel
 {
     [ObservableProperty]
     AppUser userDetails;
@@ -86,8 +81,10 @@ public partial class DashboardViewModel(
                     SKColors.White)
         }
     };
+    private readonly IJobManager _jobManager = jobManager;
+
     ObservableCollection<DateTimePoint> ChartValues { get; } = new ObservableCollection<DateTimePoint>();
-    
+
     [RelayCommand]
     public async Task IsRefreshing()
     {
@@ -118,16 +115,34 @@ public partial class DashboardViewModel(
         HighestReading = ordered.First();
         LastReading = ordered.Last();
 
-#if ANDROID || IOS
-        notificationService.PublishNotification("No connected device", "CGM device", "There is not connected device to your app. Tap here to connect",
-            DateTime.Now, NotificationRepeat.No, TimeSpan.FromHours(1));
-#endif
-
         IsBusy = false;
         IsCompleted = true;
+        var access = await _jobManager.RequestAccess();
+        if (access != AccessState.Available)
+        {
+            await Shell.Current.DisplayAlert("Error", "Job permissions failed: " + access, "OK");
+            return;
+        }
+        else
+        {
+#if __MOBILE__
+            var job = _jobManager.GetJob("DataBackgroundJob");
+            if (_jobManager.IsRunning)
+            {
+                await Shell.Current.DisplayAlert("ERROR", "Job Manager is already running", "OK");
+            }
+            else
+            {
+
+                await _jobManager.RunAll();
+            }
+
+#endif
+        }
     }
     public void OnAppearing()
     {
-        IsBusy = true;       
+        IsBusy = true;
+        
     }
 }

@@ -3,7 +3,7 @@ using CommunityToolkit.Maui.Alerts;
 
 namespace SukaliCareApp.ViewModels
 {
-    public partial class CompleteAccountViewModel(HttpProxyService httpProxy) : BaseViewModel
+    public partial class CompleteAccountViewModel : BaseViewModel
     {
         [ObservableProperty]
         private string firstname;

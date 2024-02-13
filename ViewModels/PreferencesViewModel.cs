@@ -1,7 +1,7 @@
 ﻿
 namespace SukaliCareApp.ViewModels
 {
-    public partial class PreferencesViewModel(HttpProxyService httpProxy) : BaseViewModel
+    public partial class PreferencesViewModel : BaseViewModel
     {
         [ObservableProperty]
         UserPreferences userPreferences;
@@ -61,7 +61,7 @@ namespace SukaliCareApp.ViewModels
             SetDuration = duration;
             SavePreferences();
         }
-        public async void SavePreferences()
+        public void SavePreferences()
         {
             Preferences.Remove(Stores.preferenceStore);
             Preferences.Set(Stores.preferenceStore, JsonConvert.SerializeObject(UserPreferences));

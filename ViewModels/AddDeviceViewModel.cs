@@ -1,18 +1,12 @@
-﻿using CommunityToolkit.Maui.Alerts;
-using CommunityToolkit.Mvvm.Messaging;
-using Mopups.Services;
+﻿using Mopups.Services;
 using Plugin.BLE.Abstractions.Contracts;
+using Plugin.BLE.Abstractions.EventArgs;
 using Plugin.BLE.Abstractions.Exceptions;
-using Shiny;
-using Shiny.BluetoothLE;
-using Shiny.BluetoothLE.Managed;
-using System.Diagnostics;
-using System.Reactive.Linq;
 using Permissions = Microsoft.Maui.ApplicationModel.Permissions;
 
 namespace SukaliCareApp.ViewModels;
 
-public partial class AddDeviceViewModel : BaseViewModel
+public partial class AddDeviceViewModel : BaseViewModel, IDisposable
 {
     private readonly IBluetoothService bluetoothService;
     private readonly IAdapter adapter;
@@ -23,45 +17,67 @@ public partial class AddDeviceViewModel : BaseViewModel
     [ObservableProperty]
     private bool isScanning = false;
 
+    private CancellationTokenSource token;
+
     public AddDeviceViewModel(IBluetoothService bluetoothService, IAdapter adapter)
     {
         this.bluetoothService = bluetoothService;
         this.adapter = adapter;
-
-        adapter.DeviceDiscovered += (s, a) =>
-        {
-            Debug.WriteLine($"Found scanned device: {a.Device.Name}");
-            MainThread.BeginInvokeOnMainThread(() =>
-            {
-                ScannedDevices.Add(a.Device);
-            });
-        };
+        adapter.ScanTimeout = 50000;
+        adapter.ScanMode = ScanMode.Balanced;
     }
 
-    
 
     [RelayCommand]
     public async Task CloseDialog()
     {
+        await adapter.StopScanningForDevicesAsync();
         await MopupService.Instance.PopAllAsync();
     }
 
     [RelayCommand]
     public async Task ScanDevices()
     {
+        
+        adapter.DeviceAdvertised += OnDiscoveredDevice;
+        adapter.DeviceDiscovered += OnDiscoveredDevice;
+
+        adapter.ScanTimeoutElapsed += async(s, e) =>
+        {
+            await Shell.Current.DisplayAlert("Stop Scan", "Scan has been stopped", "Ok");
+            Dispose();
+            IsScanning = false;
+        };
+
+        token = new CancellationTokenSource();
+
+
+        await Shell.Current.DisplayAlert("Scan Devices", "Scanning for devices", "Ok");
         if ((await Permissions.CheckStatusAsync<Permissions.Bluetooth>()) != PermissionStatus.Granted)
         {
             await Permissions.RequestAsync<Permissions.Bluetooth>();
         }
         IsScanning = true;
         ScannedDevices.Clear();
-        await adapter.StartScanningForDevicesAsync();
+        await adapter.StartScanningForDevicesAsync(cancellationToken: token.Token);
+    }
+
+    private void OnDiscoveredDevice(object sender, DeviceEventArgs e)
+    {
+        MainThread.BeginInvokeOnMainThread(async () =>
+        {
+            await Shell.Current.DisplayAlert("Device Discovered", $"Discovered {e.Device.Name}", "Ok");
+            ScannedDevices.Add(e.Device);
+        });
     }
 
     [RelayCommand]
     public async Task StopScan()
     {
+        await Shell.Current.DisplayAlert("Stop Scan", "Scan has been stopped", "Ok");
         await adapter.StopScanningForDevicesAsync();
+        IsScanning = false;
+        Dispose();
     }
 
     [RelayCommand]
@@ -86,5 +102,15 @@ public partial class AddDeviceViewModel : BaseViewModel
 
     }
 
-    
+    public void Dispose()
+    {
+        if (token is not null)
+        {
+            token.Cancel();
+            token.Dispose();
+        }
+
+        adapter.DeviceAdvertised -= OnDiscoveredDevice;
+        adapter.DeviceDiscovered -= OnDiscoveredDevice;
+    }
 }

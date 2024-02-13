@@ -52,9 +52,8 @@ public class CgmDataService
         {
             result.Add(new CGMDevice
 			{
-				DeviceId = "5387842DTF",
+				Uuid = "5387842DTF",
 				DeviceName = "CGM-347587539",
-				DeviceKey = "3546"
 			});
         }
 

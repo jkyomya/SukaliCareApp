@@ -4,18 +4,17 @@ namespace SukaliCareApp.Views;
 
 public partial class AddDeviceView : PopupPage
 {
-    private readonly AddDeviceViewModel viewModel;
+    private readonly AddDeviceViewModel _viewModel;
 
     public AddDeviceView(AddDeviceViewModel viewModel)
 	{
 		InitializeComponent();
-        this.viewModel = viewModel;
-        BindingContext = viewModel;
+        BindingContext = _viewModel = viewModel;
     }
 
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-       await viewModel.ScanDevices();
+       await _viewModel.ScanDevices();
     }
 }
