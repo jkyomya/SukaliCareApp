@@ -1,41 +1,52 @@
-﻿using CommunityToolkit.Mvvm.Messaging;
-using Microsoft.Extensions.Logging;
-using Plugin.BLE.Abstractions.Contracts;
-using Plugin.BLE.Abstractions.Exceptions;
-using Shiny.Jobs;
-using SukaliCareApp.Messages;
-using System.Diagnostics;
-
-namespace SukaliCareApp.Services;
+﻿namespace SukaliCareApp.Services;
 
 public class DataBackgroundJob : IJob
 {
     private readonly IBluetoothService _bluetoothService;
     private readonly AppNotificationService _notificationService;
+    private readonly CgmReadingDatabase _database;
+    private readonly IAdapter _adapter;
 
     public DataBackgroundJob(
         IBluetoothService bluetoothService,
-        AppNotificationService notificationService)
+        AppNotificationService notificationService,
+        IAdapter adapter,
+        CgmReadingDatabase database)
     {
         _bluetoothService = bluetoothService;
+        _adapter = adapter;
         _notificationService = notificationService;
+        _database = database;
     }
 
     public async Task Run(JobInfo jobInfo, CancellationToken cancelToken)
     {
         try
         {
-            await Shell.Current.DisplayAlert("Data Background Job", "Fetching data from device", "Ok");
-            var device = JsonConvert.DeserializeObject<CGMDevice>(
+            CGMDevice device = JsonConvert.DeserializeObject<CGMDevice>(
                 Preferences.Get(Stores.connectedDevice, null)) ?? throw new ArgumentNullException("No device connected");
-
+            
             await _bluetoothService.Connect(device.DeviceName);
             while (true)
             {
+                await _bluetoothService.Send(device.DeviceName, Encoding.UTF8.GetBytes("ping"));
                 var response = await _bluetoothService.Receive(device.DeviceName);
-                WeakReferenceMessenger.Default.Send(
-                    new DataReceivedMessage(Encoding.UTF8.GetString(response)));
+                string readingRaw = Encoding.UTF8.GetString(response);
 
+                if(float.TryParse(readingRaw, out float readingParsed))
+                {
+                    CgmReading reading = new()
+                    {
+                        GlucoseValue = new GlucoseValue(readingParsed, "mmol/l"),
+                        Id = Guid.NewGuid(),
+                        ReadingDate = DateTime.Now
+                    };
+
+                    await _database.SaveReadingAsync(reading);
+
+                    WeakReferenceMessenger.Default.Send(new DataReceivedMessage(reading));
+                }
+                
                 var prefs = JsonConvert.DeserializeObject<UserPreferences>(Preferences.Get(Stores.preferenceStore, null));
                 await Task.Delay(TimeSpan.FromMinutes(prefs.SyncFrequency), cancelToken);
             }

@@ -4,6 +4,7 @@ using Mopups.Interfaces;
 using Mopups.Services;
 using Plugin.BLE.Abstractions.Contracts;
 using Plugin.BLE.Abstractions.EventArgs;
+using Plugin.BLE.Abstractions.Exceptions;
 using Shiny.BluetoothLE;
 using System.Diagnostics;
 
@@ -11,9 +12,7 @@ namespace SukaliCareApp.ViewModels;
 
 public partial class DeviceMgtViewModel : BaseViewModel
 {
-    private readonly CgmDataService dataService;
     private readonly IPopupNavigation popupNavigation;
-    private readonly IBleManager bleManager;
     private readonly IAdapter adapter;
     private readonly IBluetoothService bluetoothService;
     private readonly AddDeviceViewModel addDeviceViewModel;
@@ -26,16 +25,12 @@ public partial class DeviceMgtViewModel : BaseViewModel
     public ObservableCollection<CGMDevice> PairedDevices { get; set; } = [];
 
     public DeviceMgtViewModel(
-            CgmDataService dataService,
             IPopupNavigation popupNavigation,
-            IBleManager bleManager,
             IAdapter adapter,
             IBluetoothService bluetoothService,
             AddDeviceViewModel addDeviceViewModel)
     {
-        this.dataService = dataService;
         this.popupNavigation = popupNavigation;
-        this.bleManager = bleManager;
         this.adapter = adapter;
         this.bluetoothService = bluetoothService;
         this.addDeviceViewModel = addDeviceViewModel;
@@ -94,12 +89,15 @@ public partial class DeviceMgtViewModel : BaseViewModel
             var devices = bluetoothService.GetConnectedDevices();
             foreach (var device in devices)
             {
-                Debug.WriteLine($"Device: {device.Name}");
-                PairedDevices.Add(new CGMDevice
+                if (device.Name.Contains("Sukali", StringComparison.CurrentCultureIgnoreCase))
                 {
-                    Uuid = device.Id.ToString() ?? Guid.NewGuid().ToString(),
-                    DeviceName = device.Name
-                });
+                    PairedDevices.Add(new CGMDevice
+                    {
+                        Uuid = device.Id.ToString() ?? Guid.NewGuid().ToString(),
+                        DeviceName = device.Name
+                    });
+                }
+
             }
         }
         catch (Exception ex)
@@ -157,6 +155,37 @@ public partial class DeviceMgtViewModel : BaseViewModel
         Dispose();
     }
 
+    [RelayCommand]
+    public async Task ConnectDevice(CGMDevice peripheral)
+    {
+        bool result = await Shell.Current.DisplayAlert(
+            "Connect Device",
+            $"Do you want to connect to {peripheral.DeviceName}?", "Yes", "No");
+        if (result)
+        {
+            try
+            {
+                await bluetoothService.Connect(peripheral.DeviceName);
+                //await adapter.ConnectToDeviceAsync(ScannedDevices.First(x => x.Name == peripheral.DeviceName));
+                
+                Preferences.Set(Stores.connectedDevice, JsonConvert.SerializeObject(peripheral));
+            }
+            catch (DeviceConnectionException)
+            {
+                await Shell.Current.DisplayAlert(
+                      "Connection Error",
+                      $"Could not connect to {peripheral.DeviceName}. Please try again.", "Ok");
+            }
+            catch (Exception ex)
+            {
+                Debug.Write(ex);
+                await Shell.Current.DisplayAlert(
+                      "Connection Error",
+                      $"Something went wrong! Could not connect to {peripheral.DeviceName}. Please try again.", "Ok");
+            }
+        }
+
+    }
     public void Dispose()
     {
         if (token is not null)

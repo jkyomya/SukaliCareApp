@@ -40,6 +40,9 @@
                             BackgroundColor="{AppThemeBinding Light={x:StaticResource LightGray},
                                                               Dark={x:StaticResource DarkGray}}"
                             HeightRequest="1" />
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:DeviceMgtViewModel}}, Path=ConnectDeviceCommand}" CommandParameter="{Binding .}" />
+                        </Grid.GestureRecognizers>
                     </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>

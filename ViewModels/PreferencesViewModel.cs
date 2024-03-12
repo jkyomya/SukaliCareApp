@@ -39,7 +39,7 @@ namespace SukaliCareApp.ViewModels
         public async Task ChangeUnits()
         {
             var result = await Shell.Current.DisplayActionSheet("Change your glucose units", "Cancel", null, ["mmol/l", "mg/dl"]);
-            if(string.IsNullOrEmpty (result))
+            if(string.IsNullOrEmpty (result) || result == "Cancel")
             {
                 return;
             }
@@ -50,16 +50,18 @@ namespace SukaliCareApp.ViewModels
         [RelayCommand]
         public async Task ChangeFrequency()
         {
-            var result = await Shell.Current.DisplayPromptAsync("Change sync frequency", "After how many minutes should teh phone read values from your smart watch",
+            var result = await Shell.Current.DisplayPromptAsync("Change sync frequency", "After how many minutes should the phone read values from your smart device",
                 "Ok", "Cancel", "minutes", keyboard: Keyboard.Numeric);
             if (string.IsNullOrEmpty(result))
             {
                 return;
             }
-            int.TryParse(result, out int duration);
-            UserPreferences.SyncFrequency = duration;
-            SetDuration = duration;
-            SavePreferences();
+            if (int.TryParse(result, out int duration))
+            {
+                UserPreferences.SyncFrequency = duration;
+                SetDuration = duration;
+                SavePreferences();
+            }
         }
         public void SavePreferences()
         {
@@ -69,20 +71,20 @@ namespace SukaliCareApp.ViewModels
         }
 
         [RelayCommand]
-        public async Task ViewTerms()
+        public static async Task ViewTerms()
         {
             await Browser.OpenAsync("http://sukalicare.nexus-healthcare.org/privacyterms");
         }
 
         [RelayCommand]
-        public async Task SubmitFeedback()
+        public static async Task SubmitFeedback()
         {
             await Browser.OpenAsync("http://sukalicare.nexus-healthcare.org/feedback");
         }
         [RelayCommand]
-        public async Task UpdateApp()
+        public static async Task UpdateApp()
         {
-            await Shell.Current.DisplayAlert("Update", "No update at the momment", "Ok");
+            await Shell.Current.DisplayAlert("Update", "No update at the moment", "Ok");
         }
     }
 }

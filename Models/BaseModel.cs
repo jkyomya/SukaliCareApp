@@ -1,8 +1,11 @@
 ﻿
+using System.ComponentModel.DataAnnotations;
+
 namespace SukaliCareApp.Models
 {
     public abstract class BaseModel
     {
-        public int Id { get; set; } 
+        [Key]
+        public Guid Id { get; set; } 
     }
 }

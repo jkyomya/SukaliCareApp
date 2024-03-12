@@ -75,19 +75,18 @@
                             Text="Connection status" />
                         <Label Grid.Row="1" FontSize="16">
                             <Label.Text>
-                                <MultiBinding StringFormat="{}{0} {1}">
+                                <MultiBinding StringFormat="{}{0}">
                                     <Binding
                                         Converter="{StaticResource BoolToConnection}"
                                         FallbackValue="No device found"
                                         Path="Device.IsConnected" />
-                                    <Binding Path="Device.Battery" StringFormat="{}({0}%)" />
                                 </MultiBinding>
                             </Label.Text>
                         </Label>
                         <Label
                             Grid.Row="2"
                             FontSize="14"
-                            Text="{Binding Device.LastConneted, StringFormat='{}Active for {0}', Converter={converter:DateToDurationConverter}, FallbackValue='Waiting for connection ...'}"
+                            Text="{Binding Device.LastConnected, StringFormat='{}Active {0}', Converter={converter:DateToDurationConverter}, FallbackValue='Waiting for connection ...'}"
                             TextColor="{x:StaticResource PrimaryGradientStop}" />
                         <Image
                             Grid.RowSpan="3"

@@ -14,20 +14,9 @@ namespace SukaliCareApp.ViewModels
         {
             try
             {
-                UserPreferences pref = new()
-            {
-                SyncFrequency = 10,
-                AllowAutoConnect = true,
-                AllowNotifications = true,
-                Units = "mmol/l"
-            };
-            Preferences.Set(Stores.preferenceStore, JsonConvert.SerializeObject(pref));
-
-            IsBusy = true;
+                IsBusy = true;
                 if (Preferences.ContainsKey(Stores.userDetailsStore))
                 {
-                    await Task.Delay(1000);
-
                     await Shell.Current.GoToAsync($"//{nameof(DashboardView)}");
                 }
                 else if (Preferences.ContainsKey(Stores.firebaseUserAccountStore))
@@ -38,6 +27,8 @@ namespace SukaliCareApp.ViewModels
                 {
                     IsLoggedOut = true;
                 }
+
+                
             }
             catch (Exception ex)
             {

@@ -2,17 +2,16 @@ namespace SukaliCareApp.Views;
 
 public partial class DashboardView : ContentPage
 {
-    private readonly DashboardViewModel viewModel;
+    private readonly DashboardViewModel _viewModel;
 
     public DashboardView(DashboardViewModel viewModel)
 	{
 		InitializeComponent();
-		BindingContext = viewModel;
-        this.viewModel = viewModel;
+		BindingContext = _viewModel = viewModel;
     }
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        viewModel.OnAppearing();
+        _viewModel.OnAppearing();
     }
 }

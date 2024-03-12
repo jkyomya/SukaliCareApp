@@ -1,9 +1,8 @@
 ﻿
 namespace SukaliCareApp.Models
 {
-    public class AppUser
+    public class AppUser : BaseModel
     {
-        public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; } = string.Empty;
         public string MiddleName { get; set; }

@@ -1,4 +1,5 @@
-﻿using LiveChartsCore;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using LiveChartsCore;
 using LiveChartsCore.Defaults;
 using LiveChartsCore.Measure;
 using LiveChartsCore.SkiaSharpView;
@@ -6,17 +7,12 @@ using LiveChartsCore.SkiaSharpView.Painting;
 using LiveChartsCore.SkiaSharpView.Painting.Effects;
 using SkiaSharp;
 using SukaliCareApp.Converters;
+using SukaliCareApp.Messaging;
 using System.Reactive.Linq;
 
 namespace SukaliCareApp.ViewModels;
 
-public partial class CGMReadingsViewModel(
-    CgmDataService service
-#if ANDROID || IOS
-    , AppNotificationService notificationService
-#endif
-    )
-    : BaseViewModel
+public partial class CGMReadingsViewModel : BaseViewModel, IRecipient<DataReceivedMessage>
 {
     [ObservableProperty]
     string currentMonth = DateTime.Today.ToString("MMMM");
@@ -86,11 +82,22 @@ public partial class CGMReadingsViewModel(
     [ObservableProperty]
     CgmReading latestReading;
 
+    private readonly AppNotificationService notificationService;
+    private readonly CgmReadingDatabase database;
+    private UnitsConveter converter = new();
+
+    public CGMReadingsViewModel(
+        AppNotificationService notificationService, 
+        CgmReadingDatabase database)
+    {
+        this.notificationService = notificationService;
+        this.database = database;
+        WeakReferenceMessenger.Default.RegisterAll(this);
+    }
 
     [RelayCommand]
     public void OnRefreshing()
     {
-        UnitsConveter converter = new();
         LineSeries<DateTimePoint> lineSeries = new()
         {
             Values = ChartValues,
@@ -116,7 +123,7 @@ public partial class CGMReadingsViewModel(
             }
         ];
 
-        Observable.FromAsync(() => service.GetItems())
+        Observable.FromAsync(() => database.GetReadingsAsync())
             .Retry(3)
             .Subscribe((result) =>
             {
@@ -151,7 +158,7 @@ public partial class CGMReadingsViewModel(
                     IsBusy = false;
                 });
             },
-            onError: async (errror) =>
+            onError: async (error) =>
             {
                 await Shell.Current.DisplayAlert("Internet", "Please make sure you are connected to the internet", "Ok");
             });
@@ -160,7 +167,7 @@ public partial class CGMReadingsViewModel(
     [RelayCommand]
     public async Task LoadMore()
     {
-        var items = await service.GetItems();
+        var items = await database.GetReadingsAsync();
 
         foreach (var item in items)
         {
@@ -172,5 +179,17 @@ public partial class CGMReadingsViewModel(
     private Task GoToDetails(CgmReading item)
     {
         return Task.CompletedTask;
+    }
+
+    public void Receive(DataReceivedMessage message)
+    {
+            var newObjList = Items.Prepend(message.Value);
+            Items.Add(message.Value);
+
+            ChartValues.Add(
+                new DateTimePoint(
+                    DateTime.Now,
+                    (double)converter.ConvertValue(message.Value.GlucoseValue)
+                  ));
     }
 }

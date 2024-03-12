@@ -2,6 +2,7 @@
 using Android.Content;
 using Java.Util;
 using Plugin.BLE.Abstractions.Contracts;
+using Plugin.BLE.Abstractions.Exceptions;
 using Plugin.BLE.Android;
 using Application = Android.App.Application;
 using Device = Plugin.BLE.Android.Device;
@@ -54,8 +55,9 @@ public class BluetoothService : IBluetoothService
         {
             socket.Connect();
         }
-        catch (System.Exception)
+        catch (Exception ex)
         {
+            throw new DeviceConnectionException(Guid.Empty, deviceName, ex.Message);
         }
         return Task.CompletedTask;
     }

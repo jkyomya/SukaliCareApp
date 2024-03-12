@@ -44,7 +44,7 @@ namespace SukaliCareApp
 
         public static MauiAppBuilder RegisterServices(this MauiAppBuilder builder)
         {
-            builder.Services.AddScoped<CgmDataService>();
+            builder.Services.AddScoped<CgmReadingDatabase>();
             builder.Services.AddScoped<FirebaseService>();
             builder.Services.AddSingleton(MopupService.Instance);
             builder.Services.AddTransient<HttpProxyService>();
@@ -82,7 +82,7 @@ namespace SukaliCareApp
         public static MauiAppBuilder RegisterViewModels(this MauiAppBuilder builder)
         {
             builder.Services.AddScoped<CGMReadingsViewModel>();
-            builder.Services.AddTransient<DashboardViewModel>();
+            builder.Services.AddSingleton<DashboardViewModel>();
             builder.Services.AddTransient<DeviceMgtViewModel>();
             builder.Services.AddScoped<AddDeviceViewModel>();
             builder.Services.AddScoped<LibraryViewModel>();
@@ -106,7 +106,7 @@ namespace SukaliCareApp
             builder.Services.AddTransient<PreferencesView>();
             builder.Services.AddScoped<ReadingsView>();
             builder.Services.AddTransient<SignupView>();
-            builder.Services.AddTransient<DashboardView>();
+            builder.Services.AddSingleton<DashboardView>();
 
             return builder;
         }

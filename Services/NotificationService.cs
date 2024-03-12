@@ -15,22 +15,30 @@ namespace SukaliCareApp.Services
         public void PublishNotification(string title, string subtitle, string description,
             DateTime dateTime, NotificationRepeat repeatProfile, TimeSpan interval)
         {
-            var request = new NotificationRequest
+            string prefs = Preferences.Get(Stores.preferenceStore, null);
+            if(prefs is not null)
             {
-                NotificationId = new Random().Next(10,10000),
-                Title = title,
-                Subtitle = subtitle,
-                Description = description,
-                Schedule = new NotificationRequestSchedule
+                UserPreferences userPreferences = JsonConvert.DeserializeObject<UserPreferences>(prefs);
+                if (userPreferences.AllowNotifications)
                 {
-                    NotifyTime = dateTime,
-                    RepeatType = repeatProfile,
-                    NotifyRepeatInterval = interval
-                },
-                
-            };
+                    var request = new NotificationRequest
+                    {
+                        NotificationId = new Random().Next(10, 10000),
+                        Title = title,
+                        Subtitle = subtitle,
+                        Description = description,
+                        Schedule = new NotificationRequestSchedule
+                        {
+                            NotifyTime = dateTime,
+                            RepeatType = repeatProfile,
+                            NotifyRepeatInterval = interval
+                        },
 
-            LocalNotificationCenter.Current.Show(request);
+                    };
+
+                    LocalNotificationCenter.Current.Show(request);
+                }
+            }
         }
     }
 }

@@ -1,7 +1,4 @@
-﻿
-using Firebase.Auth;
-using LiveChartsCore;
-using LiveChartsCore.Drawing;
+﻿using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting.Effects;
 using LiveChartsCore.SkiaSharpView.Painting;
@@ -11,14 +8,15 @@ using System.Reactive.Linq;
 using LiveChartsCore.Defaults;
 using Shiny.Jobs;
 using Shiny;
+using CommunityToolkit.Mvvm.Messaging;
+using SukaliCareApp.Messaging;
+using CommunityToolkit.Maui.Alerts;
+using System.Diagnostics;
 
 namespace SukaliCareApp.ViewModels;
 
-public partial class DashboardViewModel(CgmDataService dataService, IJobManager jobManager) : BaseViewModel
+public partial class DashboardViewModel : BaseViewModel, IRecipient<DeviceConnectedMessage>
 {
-    [ObservableProperty]
-    AppUser userDetails;
-
     [ObservableProperty]
     CgmReading lastReading;
 
@@ -81,68 +79,115 @@ public partial class DashboardViewModel(CgmDataService dataService, IJobManager 
                     SKColors.White)
         }
     };
-    private readonly IJobManager _jobManager = jobManager;
+    private readonly IJobManager _jobManager;
+    private readonly CgmReadingDatabase database;
+
+    public DashboardViewModel(
+        IJobManager jobManager,
+        CgmReadingDatabase database)
+    {
+        _jobManager = jobManager;
+        this.database = database;
+
+        if (!Preferences.ContainsKey(Stores.preferenceStore))
+        {
+            UserPreferences prefs = new()
+            {
+                SyncFrequency = 10,
+                AllowAutoConnect = true,
+                AllowNotifications = true,
+                Units = "mmol/l"
+            };
+            Preferences.Set(Stores.preferenceStore, JsonConvert.SerializeObject(prefs));
+        }
+
+        WeakReferenceMessenger.Default.RegisterAll(this);
+    }
 
     ObservableCollection<DateTimePoint> ChartValues { get; } = new ObservableCollection<DateTimePoint>();
 
     [RelayCommand]
     public async Task IsRefreshing()
     {
-        UnitsConveter converter = new();
-        string savedUser = Preferences.Get(Stores.userDetailsStore, null);
-        if (!string.IsNullOrEmpty(savedUser))
+        try
         {
-            UserDetails = JsonConvert.DeserializeObject<AppUser>(savedUser);
-        }
-        var data = await dataService.GetItemsByDay();
-        data.OrderBy(p => p.ReadingDate);
-        ColumnSeries<DateTimePoint> columnSeries = new()
-        {
-            Values = ChartValues,
-            Fill = new SolidColorPaint(SKColors.DodgerBlue),
-            MaxBarWidth = double.MaxValue,
-            Stroke = null,
-        };
+            UnitsConveter converter = new();
 
-
-        ChartSeries = [columnSeries];
-        ChartValues.Clear();
-        foreach (var item in data)
-        {
-            ChartValues.Add(new DateTimePoint(item.ReadingDate, (double)converter.ConvertValue(item.GlucoseValue)));
-        }
-        var ordered = data.ToList().OrderByDescending(p => p.GlucoseValue.Value);
-        HighestReading = ordered.First();
-        LastReading = ordered.Last();
-
-        IsBusy = false;
-        IsCompleted = true;
-        var access = await _jobManager.RequestAccess();
-        if (access != AccessState.Available)
-        {
-            await Shell.Current.DisplayAlert("Error", "Job permissions failed: " + access, "OK");
-            return;
-        }
-        else
-        {
-#if __MOBILE__
-            var job = _jobManager.GetJob("DataBackgroundJob");
-            if (_jobManager.IsRunning)
+            var data = await database.GetDailyReadings(7);
+            ColumnSeries<DateTimePoint> columnSeries = new()
             {
-                await Shell.Current.DisplayAlert("ERROR", "Job Manager is already running", "OK");
+                Values = ChartValues,
+                Fill = new SolidColorPaint(SKColors.DodgerBlue),
+                MaxBarWidth = double.MaxValue,
+                Stroke = null,
+            };
+
+
+            ChartSeries = [columnSeries];
+            ChartValues.Clear();
+            foreach (var item in data)
+            {
+                ChartValues.Add(new DateTimePoint(item.ReadingDate, (double)converter.ConvertValue(item.GlucoseValue)));
+            }
+
+            if (data.Any())
+            {
+                var ordered = data.ToList().OrderByDescending(p => p.GlucoseValue.Value);
+                HighestReading = ordered.First();
+                LastReading = ordered.Last();
+            }
+
+            IsBusy = false;
+            IsCompleted = true;
+            var access = await _jobManager.RequestAccess();
+            if (access != AccessState.Available)
+            {
+                await Shell.Current.DisplayAlert("Error", "Job permissions failed: " + access, "OK");
+                return;
             }
             else
             {
+#if __MOBILE__
 
-                await _jobManager.RunAll();
-            }
+                if (_jobManager.IsRunning)
+                {
+                    await Shell.Current.DisplayAlert("ERROR", "Job Manager is already running", "OK");
+                }
+                else
+                {
+
+                    await _jobManager.RunAll();
+                }
 
 #endif
+            }
+        }
+        catch(Exception ex)
+        {
+            Debug.Write(ex);
+        }
+        finally
+        {
+            IsBusy = false;
         }
     }
     public void OnAppearing()
     {
         IsBusy = true;
-        
+
+    }
+
+    public void Receive(DeviceConnectedMessage message)
+    {
+        Toast.Make("Device connected");
+        ConnectionStatus = "Connected";
+        Device = new CGMDevice
+        {
+            DeviceName = message.Value.Name,
+            IsConnected = true,
+            Id = message.Value.Id,
+            LastConnected = DateTime.Now,
+            Uuid = message.Value.Id.ToString()
+        };
     }
 }
