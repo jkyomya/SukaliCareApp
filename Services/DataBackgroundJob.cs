@@ -33,6 +33,15 @@ public class DataBackgroundJob : IJob
                 var response = await _bluetoothService.Receive(device.DeviceName);
                 string readingRaw = Encoding.UTF8.GetString(response);
 
+                Debug.Write($"RECEIVED MSG: {readingRaw}");
+
+                if(!string.IsNullOrEmpty(readingRaw) &&
+                    readingRaw.Contains("Glucose", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    readingRaw = readingRaw.Replace("mmol/l", string.Empty);
+                    readingRaw = readingRaw.Replace("Glucose ", string.Empty);
+                }
+
                 if(float.TryParse(readingRaw, out float readingParsed))
                 {
                     CgmReading reading = new()
@@ -48,7 +57,14 @@ public class DataBackgroundJob : IJob
                 }
                 
                 var prefs = JsonConvert.DeserializeObject<UserPreferences>(Preferences.Get(Stores.preferenceStore, null));
-                await Task.Delay(TimeSpan.FromMinutes(prefs.SyncFrequency), cancelToken);
+                if (prefs.SyncFrequency > 0)
+                {
+                    await Task.Delay(TimeSpan.FromMinutes(prefs.SyncFrequency), cancelToken);
+                }
+                else
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(5), cancelToken);
+                }
             }
             
         }

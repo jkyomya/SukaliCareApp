@@ -102,7 +102,8 @@ public partial class DeviceMgtViewModel : BaseViewModel
         }
         catch (Exception ex)
         {
-            await Shell.Current.DisplayAlert("Error", ex.Message, "Ok");
+            Debug.Write(ex);
+            //await Shell.Current.DisplayAlert("Error", ex.Message, "Ok");
         }
         finally
         {

@@ -63,7 +63,8 @@ public partial class CGMReadingsViewModel : BaseViewModel, IRecipient<DataReceiv
                     SKColors.LightSlateGray :
                     SKColors.White),
             Position = AxisPosition.End,
-            Labeler = value => value.ToString("F1")
+            Labeler = value => value.ToString("F1"),
+            MinLimit = 0
         }
     };
 

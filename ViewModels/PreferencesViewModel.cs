@@ -65,7 +65,7 @@ namespace SukaliCareApp.ViewModels
         }
         public void SavePreferences()
         {
-            Preferences.Remove(Stores.preferenceStore);
+            //Preferences.Remove(Stores.preferenceStore);
             Preferences.Set(Stores.preferenceStore, JsonConvert.SerializeObject(UserPreferences));
             //await httpProxy.UpdatePreference(UserPreferences);
         }
@@ -74,6 +74,17 @@ namespace SukaliCareApp.ViewModels
         public static async Task ViewTerms()
         {
             await Browser.OpenAsync("http://sukalicare.nexus-healthcare.org/privacyterms");
+        }
+
+        public void NotificationToggled(bool value)
+        {
+            UserPreferences.AllowNotifications = AllowNotifications;
+            SavePreferences();
+        }
+        public void ConnectionToggled(bool value)
+        {
+            UserPreferences.AllowAutoConnect = AllowAutoConnect;
+            SavePreferences();
         }
 
         [RelayCommand]

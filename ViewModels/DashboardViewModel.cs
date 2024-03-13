@@ -76,7 +76,8 @@ public partial class DashboardViewModel : BaseViewModel, IRecipient<DeviceConnec
             LabelsPaint = new SolidColorPaint(
                 Application.Current.RequestedTheme == AppTheme.Light ?
                     SKColors.LightSlateGray :
-                    SKColors.White)
+                    SKColors.White),
+            MinLimit  = 0
         }
     };
     private readonly IJobManager _jobManager;

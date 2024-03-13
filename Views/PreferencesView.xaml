@@ -125,7 +125,8 @@
                     Grid.Column="1"
                     HorizontalOptions="End"
                     IsToggled="{Binding AllowNotifications}"
-                    OnColor="{x:StaticResource Primary}" />
+                    OnColor="{x:StaticResource Primary}"
+                    Toggled="Notification_Switch_Toggled" />
             </Grid>
             <BoxView
                 Margin="0,0,0,0"
@@ -149,7 +150,8 @@
                     Grid.Column="1"
                     HorizontalOptions="End"
                     IsToggled="{Binding AllowAutoConnect}"
-                    OnColor="{x:StaticResource Primary}" />
+                    OnColor="{x:StaticResource Primary}"
+                    Toggled="Connect_Switch_Toggled" />
             </Grid>
             <BoxView
                 Margin="0,0,0,0"

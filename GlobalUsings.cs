@@ -24,3 +24,4 @@ global using Plugin.BLE.Abstractions.Exceptions;
 global using Shiny.Jobs;
 global using SukaliCareApp.Messaging;
 global using System.Diagnostics;
+global using NetworkAccess = Microsoft.Maui.Networking.NetworkAccess;
