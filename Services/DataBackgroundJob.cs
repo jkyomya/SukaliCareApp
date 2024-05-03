@@ -1,69 +1,80 @@
-﻿namespace SukaliCareApp.Services;
+﻿using System.Text.Json;
+using System.Text.RegularExpressions;
+
+namespace SukaliCareApp.Services;
 
 public class DataBackgroundJob : IJob
 {
-    private readonly IBluetoothService _bluetoothService;
     private readonly AppNotificationService _notificationService;
     private readonly CgmReadingDatabase _database;
-    private readonly IAdapter _adapter;
+    private readonly BluetoothConnectionService bluetoothConnectionService;
+    private readonly BluetoothService _bluetoothService;
 
     public DataBackgroundJob(
-        IBluetoothService bluetoothService,
         AppNotificationService notificationService,
-        IAdapter adapter,
-        CgmReadingDatabase database)
+        CgmReadingDatabase database, BluetoothConnectionService bluetoothConnectionService,
+        BluetoothService bluetoothService)
     {
-        _bluetoothService = bluetoothService;
-        _adapter = adapter;
         _notificationService = notificationService;
         _database = database;
+        this.bluetoothConnectionService = bluetoothConnectionService;
+        _bluetoothService = bluetoothService;
     }
 
     public async Task Run(JobInfo jobInfo, CancellationToken cancelToken)
     {
         try
         {
-            CGMDevice device = JsonConvert.DeserializeObject<CGMDevice>(
+            Debug.WriteLine("BACKGROUND JOB IS RUNNNING");
+            CGMDevice device = JsonSerializer.Deserialize<CGMDevice>(
                 Preferences.Get(Stores.connectedDevice, null)) ?? throw new ArgumentNullException("No device connected");
+
+            if(!await bluetoothConnectionService.ConnectDevice(device))
+            {
+                throw new ApplicationException("Device not paired");
+            }
             
-            await _bluetoothService.Connect(device.DeviceName);
             while (true)
             {
                 await _bluetoothService.Send(device.DeviceName, Encoding.UTF8.GetBytes("ping"));
                 var response = await _bluetoothService.Receive(device.DeviceName);
                 string readingRaw = Encoding.UTF8.GetString(response);
 
-                Debug.Write($"RECEIVED MSG: {readingRaw}");
-
-                if(!string.IsNullOrEmpty(readingRaw) &&
+                if (!string.IsNullOrEmpty(readingRaw) &&
                     readingRaw.Contains("Glucose", StringComparison.CurrentCultureIgnoreCase))
                 {
-                    readingRaw = readingRaw.Replace("mmol/l", string.Empty);
-                    readingRaw = readingRaw.Replace("Glucose ", string.Empty);
-                }
+                    Debug.Write($"RECEIVED MSG: {readingRaw}");
+                    await Shell.Current.DisplayAlert("Received reading", readingRaw, "Ok");
 
-                if(float.TryParse(readingRaw, out float readingParsed))
-                {
-                    CgmReading reading = new()
+                    string pattern = @"^Glucose_reading_\d+\.\d+_mmol/L_end$";
+                    Match match = Regex.Match(readingRaw, pattern);
+                    if (match.Success)
                     {
-                        GlucoseValue = new GlucoseValue(readingParsed, "mmol/l"),
-                        Id = Guid.NewGuid(),
-                        ReadingDate = DateTime.Now
-                    };
 
-                    await _database.SaveReadingAsync(reading);
+                        if (float.TryParse(match.Groups[1].Value, out float readingParsed))
+                        {
+                            CgmReading reading = new()
+                            {
+                                GlucoseValue = new GlucoseValue(readingParsed, "mmol/l"),
+                                Id = Guid.NewGuid(),
+                                ReadingDate = DateTime.Now
+                            };
 
-                    WeakReferenceMessenger.Default.Send(new DataReceivedMessage(reading));
+                            await _database.SaveReadingAsync(reading);
+
+                            WeakReferenceMessenger.Default.Send(new DataReceivedMessage(reading));
+                        }
+                    }
                 }
-                
-                var prefs = JsonConvert.DeserializeObject<UserPreferences>(Preferences.Get(Stores.preferenceStore, null));
+
+                var prefs = JsonSerializer.Deserialize<UserPreferences>(Preferences.Get(Stores.preferenceStore, null));
                 if (prefs.SyncFrequency > 0)
                 {
                     await Task.Delay(TimeSpan.FromMinutes(prefs.SyncFrequency), cancelToken);
                 }
                 else
                 {
-                    await Task.Delay(TimeSpan.FromSeconds(5), cancelToken);
+                    await Task.Delay(TimeSpan.FromSeconds(1), cancelToken);
                 }
             }
             

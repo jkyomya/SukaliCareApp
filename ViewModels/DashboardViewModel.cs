@@ -6,12 +6,8 @@ using SkiaSharp;
 using SukaliCareApp.Converters;
 using System.Reactive.Linq;
 using LiveChartsCore.Defaults;
-using Shiny.Jobs;
-using Shiny;
-using CommunityToolkit.Mvvm.Messaging;
-using SukaliCareApp.Messaging;
 using CommunityToolkit.Maui.Alerts;
-using System.Diagnostics;
+using System.Text.Json;
 
 namespace SukaliCareApp.ViewModels;
 
@@ -82,13 +78,19 @@ public partial class DashboardViewModel : BaseViewModel, IRecipient<DeviceConnec
     };
     private readonly IJobManager _jobManager;
     private readonly CgmReadingDatabase database;
+    private readonly BluetoothConnectionService _blueToothConnectionService;
+    private readonly IAdapter _adapter;
 
     public DashboardViewModel(
         IJobManager jobManager,
-        CgmReadingDatabase database)
+        CgmReadingDatabase database,
+        BluetoothConnectionService blueToothConnectionService,
+        IAdapter adapter)
     {
         _jobManager = jobManager;
         this.database = database;
+        _blueToothConnectionService = blueToothConnectionService;
+        _adapter = adapter;
 
         if (!Preferences.ContainsKey(Stores.preferenceStore))
         {
@@ -99,10 +101,13 @@ public partial class DashboardViewModel : BaseViewModel, IRecipient<DeviceConnec
                 AllowNotifications = true,
                 Units = "mmol/l"
             };
-            Preferences.Set(Stores.preferenceStore, JsonConvert.SerializeObject(prefs));
+            Preferences.Set(Stores.preferenceStore, JsonSerializer.Serialize(prefs));
         }
 
         WeakReferenceMessenger.Default.RegisterAll(this);
+
+        var sample = _adapter.WhenAnyValue()
+        
     }
 
     ObservableCollection<DateTimePoint> ChartValues { get; } = new ObservableCollection<DateTimePoint>();
@@ -140,6 +145,8 @@ public partial class DashboardViewModel : BaseViewModel, IRecipient<DeviceConnec
 
             IsBusy = false;
             IsCompleted = true;
+
+#if __MOBILE__
             var access = await _jobManager.RequestAccess();
             if (access != AccessState.Available)
             {
@@ -148,24 +155,29 @@ public partial class DashboardViewModel : BaseViewModel, IRecipient<DeviceConnec
             }
             else
             {
-#if __MOBILE__
 
-                if (_jobManager.IsRunning)
+                if (!_jobManager.IsRunning)
                 {
-                    await Shell.Current.DisplayAlert("ERROR", "Job Manager is already running", "OK");
-                }
-                else
-                {
-
+                    Debug.WriteLine("STARTING BACKGROUNF JOB");
+                    Observable.FromAsync(async () => await _blueToothConnectionService.ConnectDevice())
+                        .Subscribe(result =>
+                        {
+                            if(result is not null)
+                            {
+                                ConnectionStatus = "Connected";
+                                Device = result;
+                            }
+                        });
                     await _jobManager.RunAll();
                 }
-
-#endif
             }
+#endif
+        
         }
         catch(Exception ex)
         {
             Debug.Write(ex);
+            await Shell.Current.DisplayAlert("Dash error", ex.Message, "Ok");
         }
         finally
         {

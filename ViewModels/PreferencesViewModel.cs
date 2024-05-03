@@ -1,4 +1,6 @@
 ﻿
+using System.Text.Json;
+
 namespace SukaliCareApp.ViewModels
 {
     public partial class PreferencesViewModel : BaseViewModel
@@ -23,11 +25,11 @@ namespace SukaliCareApp.ViewModels
             string prefs = Preferences.Get(Stores.preferenceStore, null);
             if (!string.IsNullOrEmpty(details))
             {
-                UserDetails = JsonConvert.DeserializeObject<AppUser>(details);
+                UserDetails = JsonSerializer.Deserialize<AppUser>(details);
             }
             if (!string.IsNullOrEmpty(prefs))
             {
-                UserPreferences = JsonConvert.DeserializeObject<UserPreferences>(prefs);
+                UserPreferences = JsonSerializer.Deserialize<UserPreferences>(prefs);
                 Units = UserPreferences.Units;
                 SetDuration = UserPreferences.SyncFrequency;
                 AllowAutoConnect = UserPreferences.AllowAutoConnect;
@@ -66,7 +68,7 @@ namespace SukaliCareApp.ViewModels
         public void SavePreferences()
         {
             //Preferences.Remove(Stores.preferenceStore);
-            Preferences.Set(Stores.preferenceStore, JsonConvert.SerializeObject(UserPreferences));
+            Preferences.Set(Stores.preferenceStore, JsonSerializer.Serialize(UserPreferences));
             //await httpProxy.UpdatePreference(UserPreferences);
         }
 

@@ -13,7 +13,7 @@ public class BluetoothService : IBluetoothService
 #nullable enable
     private readonly IAdapter adapter;
 
-    static UUID? _myUuidSecure = UUID.FromString("fa87c0d0-afac-11de-8a39-0800200c9a66");
+    static UUID? _myUuidSecure = UUID.FromString("00001101-0000-1000-8000-00805F9B34FB");
     private readonly BluetoothManager manager;
     BluetoothSocket? socket;
 
@@ -119,6 +119,7 @@ public class BluetoothService : IBluetoothService
         if (!adapter.IsEnabled)
         {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ActionRequestEnable);
+            enableBtIntent.AddFlags(ActivityFlags.NewTask);
             Application.Context.StartActivity(enableBtIntent);
         }
 

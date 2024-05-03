@@ -48,6 +48,7 @@ namespace SukaliCareApp.ViewModels
         {
             await Shell.Current.GoToAsync($"//{nameof(CompleteAccountView)}");
         }
+
         private bool CheckConnectivity() => Connectivity.NetworkAccess != NetworkAccess.Internet;
     }
 }

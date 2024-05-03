@@ -1,6 +1,7 @@
 ﻿
 using CommunityToolkit.Maui.Alerts;
 using System.Net.Http.Json;
+using System.Text.Json;
 
 namespace SukaliCareApp.Services
 {
@@ -9,29 +10,29 @@ namespace SukaliCareApp.Services
         private readonly HttpClient _httpClient;
         public HttpProxyService()
         {
-            _httpClient = new HttpClient { BaseAddress = new Uri("https://localhost:7148/api/")};
+            _httpClient = new HttpClient { BaseAddress = new Uri(Stores.BaseUrl)};
         }
         public async Task<string> GetUserDetails(string email)
         {
             try
             {
-                var response = await _httpClient.GetAsync($"user?id={email}");
+                var response = await _httpClient.GetAsync($"api/clients/record?email={email}");
                 response.EnsureSuccessStatusCode();
                 if (response.IsSuccessStatusCode)
                 {
-                    dynamic result = response.Content.ReadFromJsonAsync<dynamic>();
+                    ClientDTO result = await response.Content.ReadFromJsonAsync<ClientDTO>();
                     AppUser user = new()
                     {
                         Email = result.Email,
                         FirstName = result.FirstName,
                         LastName = result.LastName,
-                        Phone = result.PhoneNumber,
+                        Phone = result.Phone,
                         DoB = result.DoB,
                         MiddleName = result.MiddleName,
                         ProfilePhoto = result.ProfilePhoto,
                         Id = result.Id,
                     };
-                    Preferences.Set(Stores.userDetailsStore, JsonConvert.SerializeObject(user));
+                    Preferences.Set(Stores.userDetailsStore, JsonSerializer.Serialize(user));
                     Preferences.Set(Stores.completedAccountStore, true);
 
                     return "success";
@@ -52,12 +53,22 @@ namespace SukaliCareApp.Services
         {
             try
             {
-                var result = await _httpClient.PostAsJsonAsync("user/create", user);
+                var result = await _httpClient.PostAsJsonAsync("api/clients/create", new ClientDTO
+                {
+                    Email = user.Email,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    MiddleName = user.MiddleName,
+                    LastSeenOn = DateTime.Now,
+                    DoB = user.DoB,
+                    Phone = user.Phone,
+                    RegisteredOn = DateTime.Now
+                });
                 if(result.IsSuccessStatusCode)
                 {
                     dynamic response = await result.Content.ReadFromJsonAsync<dynamic>();
                     user.Id = response.Id;
-                    Preferences.Set(Stores.userDetailsStore, JsonConvert.SerializeObject(user));
+                    Preferences.Set(Stores.userDetailsStore, JsonSerializer.Serialize(user));
                     Preferences.Set(Stores.completedAccountStore, true);
                 }
                 return result.IsSuccessStatusCode;
@@ -84,6 +95,72 @@ namespace SukaliCareApp.Services
                 return false;
             }
         }
+
+        public async Task<bool> UploadReadings(IEnumerable<CgmReading> reading)
+        {
+            try
+            {
+                var response = await _httpClient.PostAsJsonAsync(
+                    "api/readings/post", reading.Select(item => new GlucoseReadingDTO
+                    {
+                        GlucoseLevel = item.GlucoseValue.Value,
+                        ReadingUnits = item.GlucoseValue.Unit,
+                        ReadingDateTime = item.ReadingDate,
+                        ReadingId = item.Id
+                    }));
+
+                return response.IsSuccessStatusCode;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public async Task<List<ReadingEntity>> GetReadings(string email)
+        {
+            try
+            {
+                var results = await _httpClient.GetFromJsonAsync<IEnumerable<GlucoseReadingDTO>>("api/readings/all") ?? [];
+
+                return results
+                    .Where(x => x.ReadingId != Guid.Empty)
+                    .Select(item => new ReadingEntity
+                    {
+                        Id = item.ReadingId,
+                        Value = item.GlucoseLevel,
+                        Unit = item.ReadingUnits,
+                        ReadingDate = item.ReadingDateTime,
+                        UserId = item.ClientId.ToString(),
+                        UserName = item.ClientId.ToString()
+                    }).ToList();
+            }
+            catch
+            {
+                return [];
+            }
+        }
+        public async Task<bool> SaveDevice(CGMDevice device)
+        {
+            try
+            {
+                var response = await _httpClient.PostAsJsonAsync("api/devices/register", new CgmDevicesDTO
+                {
+                    DeviceName = device.DeviceName,
+                    SerialNumber = device.Uuid,
+                    Uuid = device.Uuid,
+                    LastConnected = DateTime.Now,
+                    MacAddress = device.Uuid,
+                });
+
+                return response.IsSuccessStatusCode;
+            }
+            catch
+            {
+                return false;
+            }
+
+        }
         public async Task<UserPreferences> GetPreferences()
         {
             try
@@ -97,7 +174,7 @@ namespace SukaliCareApp.Services
                     AllowNotifications = result.AllowNotification,
                     Units = result.Units
                 };
-                Preferences.Set(Stores.preferenceStore, JsonConvert.SerializeObject(prefs));
+                Preferences.Set(Stores.preferenceStore, JsonSerializer.Serialize(prefs));
                 return prefs;
             }
             catch
@@ -110,7 +187,17 @@ namespace SukaliCareApp.Services
         {
             try
             {
-                return await _httpClient.GetFromJsonAsync<LibResource[]>("lib/resources") ?? throw new Exception();
+                var result = await _httpClient.GetFromJsonAsync<LibResourceDTO[]>("api/library/all") ?? throw new Exception();
+                return result.Select(item => new LibResource
+                {
+                    Id = item.Id,
+                    Author = item.Author,
+                    Description = item.Description,
+                    PublishedOn = item.PublishedOn,
+                    Thumbnail = item.Thumbnail,
+                    Title = item.Thumbnail,
+                    Url = item.Url
+                });
             }
             catch (Exception)
             {

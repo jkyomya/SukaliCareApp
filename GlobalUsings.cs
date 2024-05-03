@@ -16,7 +16,6 @@ global using ReactiveUI;
 global using ReactiveUI.Maui;
 global using CommunityToolkit.Mvvm.Input;
 global using Mopups;
-global using Newtonsoft.Json;
 global using System.Collections.ObjectModel;
 global using CommunityToolkit.Mvvm.Messaging;
 global using Plugin.BLE.Abstractions.Contracts;

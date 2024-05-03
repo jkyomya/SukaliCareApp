@@ -1,4 +1,6 @@
-﻿namespace SukaliCareApp.ViewModels;
+﻿using System.Text.Json;
+
+namespace SukaliCareApp.ViewModels;
 
 public partial class BaseViewModel : ObservableObject
 {
@@ -15,7 +17,7 @@ public partial class BaseViewModel : ObservableObject
         string savedUser = Preferences.Get(Stores.userDetailsStore, null);
         if (!string.IsNullOrEmpty(savedUser))
         {
-            return JsonConvert.DeserializeObject<AppUser>(savedUser);
+            return JsonSerializer.Deserialize<AppUser>(savedUser);
         }
 
         return null;

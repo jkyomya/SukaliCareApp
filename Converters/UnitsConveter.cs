@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.Text.Json;
 
 namespace SukaliCareApp.Converters
 {
@@ -12,7 +13,7 @@ namespace SukaliCareApp.Converters
             {
                 return null;
             }
-            UserPreferences userPreferences = JsonConvert.DeserializeObject<UserPreferences>(prefs);
+            UserPreferences userPreferences = JsonSerializer.Deserialize<UserPreferences>(prefs);
             if (userPreferences.Units == reading.Unit )
             {
                 return $"{MathF.Round(reading.Value, 2)} {reading.Unit}";
@@ -37,7 +38,7 @@ namespace SukaliCareApp.Converters
             {
                 return 0;
             }
-            UserPreferences userPreferences = JsonConvert.DeserializeObject<UserPreferences>(prefs);
+            UserPreferences userPreferences = JsonSerializer.Deserialize<UserPreferences>(prefs);
             if (userPreferences.Units == reading.Unit)
             {
                 return MathF.Round(reading.Value, 2);
@@ -62,7 +63,7 @@ namespace SukaliCareApp.Converters
             {
                 return null;
             }
-            UserPreferences userPreferences = JsonConvert.DeserializeObject<UserPreferences>(prefs);
+            UserPreferences userPreferences = JsonSerializer.Deserialize <UserPreferences>(prefs);
             if (userPreferences.Units == "mmol/l")
             {
                 return (float)value;

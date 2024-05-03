@@ -7,8 +7,8 @@ using LiveChartsCore.SkiaSharpView.Painting;
 using LiveChartsCore.SkiaSharpView.Painting.Effects;
 using SkiaSharp;
 using SukaliCareApp.Converters;
-using SukaliCareApp.Messaging;
 using System.Reactive.Linq;
+using System.Text.Json;
 
 namespace SukaliCareApp.ViewModels;
 
@@ -22,7 +22,7 @@ public partial class CGMReadingsViewModel : BaseViewModel, IRecipient<DataReceiv
     [ObservableProperty]
     Axis[] xAxes =
     {
-        new DateTimeAxis(TimeSpan.FromMinutes(1), date => date.ToString("ddd h:mm tt"))
+        new DateTimeAxis(TimeSpan.FromMinutes(1), date => date.ToString("dd ddd h:mm tt"))
         {
             ShowSeparatorLines = true,
             SeparatorsPaint = new SolidColorPaint(
@@ -69,7 +69,7 @@ public partial class CGMReadingsViewModel : BaseViewModel, IRecipient<DataReceiv
     };
 
     public Margin DrawMargin { get; } = new Margin(8, 10, 40, 40);
-    private static bool IsStandard() => JsonConvert.DeserializeObject<UserPreferences>(Preferences.Get(Stores.preferenceStore, null)).Units == "mmol/l";
+    private static bool IsStandard() => JsonSerializer.Deserialize<UserPreferences>(Preferences.Get(Stores.preferenceStore, null)).Units == "mmol/l";
     [ObservableProperty]
     RectangularSection[] sections;
 
@@ -131,9 +131,8 @@ public partial class CGMReadingsViewModel : BaseViewModel, IRecipient<DataReceiv
 
                 Items.Clear();
                 ChartValues.Clear();
-                result.Reverse();
 #if ANDROID || IOS
-                var highest = result.First();
+                var highest = result.MaxBy(m => m.GlucoseValue.Value);
                 if (converter.ConvertValue(highest.GlucoseValue) < converter.ConvertValue(new GlucoseValue(12, "mmol/l")))
                 {
                     notificationService.PublishNotification($"Normal blood sugar level ({highest.GlucoseValue.Value} {highest.GlucoseValue.Unit})", "Current readings", "Your glucose readings are ready and the latest one seems okay. Open app to see more",
@@ -184,12 +183,11 @@ public partial class CGMReadingsViewModel : BaseViewModel, IRecipient<DataReceiv
 
     public void Receive(DataReceivedMessage message)
     {
-            var newObjList = Items.Prepend(message.Value);
-            Items.Add(message.Value);
+            Items.Insert(0,message.Value);
 
             ChartValues.Add(
                 new DateTimePoint(
-                    DateTime.Now,
+                    message.Value.ReadingDate,
                     (double)converter.ConvertValue(message.Value.GlucoseValue)
                   ));
     }

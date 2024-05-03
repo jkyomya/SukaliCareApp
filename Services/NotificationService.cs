@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace SukaliCareApp.Services
@@ -18,7 +19,7 @@ namespace SukaliCareApp.Services
             string prefs = Preferences.Get(Stores.preferenceStore, null);
             if(prefs is not null)
             {
-                UserPreferences userPreferences = JsonConvert.DeserializeObject<UserPreferences>(prefs);
+                UserPreferences userPreferences = JsonSerializer.Deserialize<UserPreferences>(prefs);
                 if (userPreferences.AllowNotifications)
                 {
                     var request = new NotificationRequest

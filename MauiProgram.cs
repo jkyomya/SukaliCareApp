@@ -48,7 +48,6 @@ namespace SukaliCareApp
             builder.Services.AddScoped<FirebaseService>();
             builder.Services.AddSingleton(MopupService.Instance);
             builder.Services.AddTransient<HttpProxyService>();
-
 #if ANDROID || IOS
             builder.Services.AddScoped<AppNotificationService>();
 #endif
@@ -56,25 +55,27 @@ namespace SukaliCareApp
             builder.Services.AddSingleton<IAdapter>(CrossBluetoothLE.Current.Adapter);
             builder.Services.AddSingleton<IBluetoothService, BluetoothService>();
             builder.Services.AddBluetoothLE();
+            builder.Services.AddScoped<BluetoothConnectionService>();
 
 #if __MOBILE__
 
-            JobInfo bluetoothJob = new JobInfo(
-                Identifier: "DataBackgroundJob",
-                JobType: typeof(DataBackgroundJob),
-                false,
-                new Dictionary<string, string>
-                {
-                    { "loops", "100" }
-                },
-                InternetAccess.Any,
-                false,
-                false,
-                false
-            );
+            //JobInfo bluetoothJob = new JobInfo(
+            //    Identifier: "DataBackgroundJob",
+            //    JobType: typeof(DataBackgroundJob),
+            //    true,
+            //    new Dictionary<string, string>
+            //    {
+            //        { "loops", "100" }
+            //    },
+            //    InternetAccess.Any,
+            //    false,
+            //    false,
+            //    false
+            //);
+            //builder.Services.AddJob(bluetoothJob);
 
-            builder.Services.AddJob(bluetoothJob);
-            
+            builder.Services.AddJob(typeof(DataBackgroundJob));
+
 #endif
 
             return builder;

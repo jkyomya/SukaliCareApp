@@ -16,5 +16,6 @@ namespace SukaliCareApp.Models
         public const string cgmDeviceStore = "cgmDevices";
         public const string cgmDeviceReadingsStore = "cgmDeviceReadings";
         public const string connectedDevice = "connectedDevice";
+        public const string BaseUrl = "https://hagfish-accepted-friendly.ngrok-free.app/";
     }
 }

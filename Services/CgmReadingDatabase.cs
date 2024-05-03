@@ -5,9 +5,10 @@ namespace SukaliCareApp.Services;
 public class CgmReadingDatabase
 {
     SQLiteAsyncConnection Database;
-    public CgmReadingDatabase()
+    private readonly HttpProxyService _httpProxyService;
+    public CgmReadingDatabase(HttpProxyService httpProxyService)
     {
-        
+        _httpProxyService = httpProxyService;
     }
 
     async Task Init()
@@ -18,21 +19,23 @@ public class CgmReadingDatabase
             //SEED DATA INTO THE DATABASE
             if(await Database.Table<ReadingEntity>().CountAsync() == 0)
             {
-                List<ReadingEntity> seedData = [];
+                string email = Preferences.Get(Stores.firebaseUserAccountStore, null);
+                var remoteData = await _httpProxyService.GetReadings(email);
                 for(int i = 1; i < 12; i++)
                 {
                     int value = new Random().Next(1, 20);
-                    seedData.Add(new ReadingEntity
+                    DateTime initialDate = DateTime.Today.Subtract(TimeSpan.FromDays(1));
+                    remoteData.Add(new ReadingEntity
                     {
                         Value = value,
                         Id = Guid.NewGuid(),
-                        ReadingDate = DateTime.Now.Subtract(TimeSpan.FromMinutes(i * 30)),
+                        ReadingDate = initialDate.Subtract(TimeSpan.FromMinutes(i * 30)),
                         Unit = "mmol/l",
                         UserName = "jhaby@gmail.com"
                     });
 
                 }
-                await Database.InsertAllAsync(seedData);
+                await Database.InsertAllAsync(remoteData);
             }
 
             return;
@@ -98,6 +101,7 @@ public class CgmReadingDatabase
     public async Task<int> SaveReadingAsync(CgmReading reading)
     {
         await Init();
+        await _httpProxyService.UploadReadings([reading]);
         return await Database.InsertAsync(new ReadingEntity
         {
             Id = Guid.NewGuid(),
