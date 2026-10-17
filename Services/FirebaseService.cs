@@ -1,4 +1,4 @@
-﻿using Firebase.Auth;
+using Firebase.Auth;
 using Firebase.Auth.Providers;
 using Firebase.Auth.Repository;
 using Microsoft.Extensions.Configuration;
@@ -11,8 +11,9 @@ namespace SukaliCareApp.Services
     public class FirebaseService
     {
         readonly FirebaseAuthClient authClient;
-        private readonly string apiKey = "AIzaSyDGCPg-xuD0siGy_iSbTRJ28bgdYiEqPl8";
-        private readonly string domain = "sukalicare-8e53d.firebaseapp.com";
+        // Project settings live in Models/FirebaseConfig.cs.
+        private readonly string apiKey = FirebaseConfig.ApiKey;
+        private readonly string domain = FirebaseConfig.AuthDomain;
         public FirebaseService()
         {
             var config = new FirebaseAuthConfig
@@ -84,6 +85,30 @@ namespace SukaliCareApp.Services
             {
                 Console.WriteLine(ex.Message);
                 return false;
+            }
+        }
+    
+        /// <summary>The signed-in user's Firebase ID, or null if nobody is signed in.</summary>
+        public string CurrentUserId => authClient.User?.Uid;
+
+        /// <summary>
+        /// A fresh ID token for calling Firebase services (such as the community database),
+        /// or null if nobody is signed in.
+        /// </summary>
+        public async Task<string> GetIdTokenAsync()
+        {
+            try
+            {
+                if (authClient.User is null)
+                {
+                    return null;
+                }
+                return await authClient.User.GetIdTokenAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
             }
         }
     }
