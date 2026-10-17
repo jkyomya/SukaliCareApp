@@ -102,9 +102,14 @@ public class BluetoothService : IBluetoothService
             return Array.Empty<byte>();
         }
 
-        byte[] content = new byte[1024];
-        await socket.InputStream.ReadAsync(content, 0, content.Length);
-        return content;
+        // Return only the bytes actually received, not the whole padded buffer.
+        byte[] buffer = new byte[1024];
+        int bytesRead = await socket.InputStream.ReadAsync(buffer, 0, buffer.Length);
+        if (bytesRead <= 0)
+        {
+            return Array.Empty<byte>();
+        }
+        return buffer.Take(bytesRead).ToArray();
 
     }
 
