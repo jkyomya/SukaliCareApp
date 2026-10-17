@@ -23,16 +23,21 @@ jobs:
           distribution: microsoft
           java-version: '17'
 
+      # The app targets .NET 8. global.json pins the SDK so the runner's
+      # newer default SDK is not used.
       - name: Set up .NET 8
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'
+          global-json-file: global.json
+
+      - name: Show .NET version
+        run: dotnet --info
 
       - name: Install .NET MAUI Android workload
         run: dotnet workload install maui-android
 
       - name: Restore packages
-        run: dotnet restore SukaliCareApp.csproj
+        run: dotnet restore SukaliCareApp.csproj -p:CheckEolTargetFramework=false
 
       - name: Build APK
         run: >
@@ -40,6 +45,7 @@ jobs:
           -f net8.0-android34.0
           -c Release
           -p:AndroidPackageFormat=apk
+          -p:CheckEolTargetFramework=false
           -p:AndroidSdkDirectory=$ANDROID_SDK_ROOT
           -o ./artifacts
 
