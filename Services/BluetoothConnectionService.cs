@@ -30,9 +30,15 @@ public class BluetoothConnectionService
     {
         try
         {
-            if (Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>().Result != PermissionStatus.Granted)
+            // Awaited rather than .Result, which can freeze the UI thread.
+            if (await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>() != PermissionStatus.Granted)
             {
                 await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
+            }
+            // Android 12+ needs the "Nearby devices" permission to scan and connect.
+            if (await Permissions.CheckStatusAsync<Permissions.Bluetooth>() != PermissionStatus.Granted)
+            {
+                await Permissions.RequestAsync<Permissions.Bluetooth>();
             }
 
 #if ANDROID
@@ -85,9 +91,17 @@ public class BluetoothConnectionService
         await InitAsync();
         try
         {
-            CGMDevice userDevice = JsonSerializer.Deserialize<CGMDevice>(
-                Preferences.Get(Stores.cgmDeviceStore, null));
-            
+            string userDeviceJson = Preferences.Get(Stores.cgmDeviceStore, null);
+            if (string.IsNullOrEmpty(userDeviceJson))
+            {
+                return null;
+            }
+            CGMDevice userDevice = JsonSerializer.Deserialize<CGMDevice>(userDeviceJson);
+            if (userDevice is null)
+            {
+                return null;
+            }
+
             IDevice device = bluetoothService.GetConnectedDevices()
                 .FirstOrDefault(x => x.Name == userDevice.DeviceName && x.Id == userDevice.Id);
             if (device == null)
@@ -194,39 +208,36 @@ public class BluetoothConnectionService
         await InitAsync();
         try
         {
-            CGMDevice device = JsonSerializer.Deserialize<CGMDevice>(
-                Preferences.Get(Stores.connectedDevice, null)) ?? throw new ArgumentNullException("No device connected");
+            string deviceJson = Preferences.Get(Stores.connectedDevice, null);
+            if (string.IsNullOrEmpty(deviceJson))
+            {
+                return null;
+            }
+            CGMDevice device = JsonSerializer.Deserialize<CGMDevice>(deviceJson);
+            if (device is null)
+            {
+                return null;
+            }
             await bluetoothService.Send(device.DeviceName, Encoding.UTF8.GetBytes("ping"));
             var response = await bluetoothService.Receive(device.DeviceName);
             string readingRaw = Encoding.UTF8.GetString(response);
 
-            if (!string.IsNullOrEmpty(readingRaw) &&
-                readingRaw.Contains("Glucose", StringComparison.CurrentCultureIgnoreCase))
+            if (GlucoseMessageParser.TryParse(readingRaw, out float readingParsed))
             {
-                Debug.Write($"RECEIVED MSG: {readingRaw}");
-                await Shell.Current.DisplayAlert("Received reading", readingRaw, "Ok");
+                Debug.WriteLine($"RECEIVED READING: {readingParsed} mmol/l");
 
-                string pattern = @"^Glucose_reading_\d+\.\d+_mmol/L_end$";
-                Match match = Regex.Match(readingRaw, pattern);
-                if (match.Success)
+                CgmReading reading = new()
                 {
+                    GlucoseValue = new GlucoseValue(readingParsed, "mmol/l"),
+                    Id = Guid.NewGuid(),
+                    ReadingDate = DateTime.Now
+                };
 
-                    if (float.TryParse(match.Groups[1].Value, out float readingParsed))
-                    {
-                        CgmReading reading = new()
-                        {
-                            GlucoseValue = new GlucoseValue(readingParsed, "mmol/l"),
-                            Id = Guid.NewGuid(),
-                            ReadingDate = DateTime.Now
-                        };
+                await _database.SaveReadingAsync(reading);
 
-                        await _database.SaveReadingAsync(reading);
+                WeakReferenceMessenger.Default.Send(new DataReceivedMessage(reading));
 
-                        WeakReferenceMessenger.Default.Send(new DataReceivedMessage(reading));
-
-                        return reading;
-                    }
-                }
+                return reading;
             }
 
             return null;
