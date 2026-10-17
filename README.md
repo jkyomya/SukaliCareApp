@@ -11,7 +11,9 @@ Built with .NET MAUI (.NET 8). The current target is Android.
 - Dashboard and readings history with charts
 - Colour-coded readings and alerts for low and high glucose
 - Units in mmol/L or mg/dL
-- Library of health education resources
+- **Learn**: offline health information on diabetes self-management, weight and activity, and nutrition for southwestern Uganda (`Resources/Raw/health_content.json`)
+- **Community**: support group directory and moderated group chat (Cloud Firestore)
+- Online health posts (from the backend, opened from the Learn tab)
 
 ## Glucose bands
 
@@ -57,6 +59,26 @@ dotnet workload install maui-android
 dotnet build -f net8.0-android34.0
 ```
 
+## Health information
+
+All articles live in one file: `Resources/Raw/health_content.json`. Edit the text there and rebuild. No code changes are needed. The content is a draft for clinical review. Before release, check it against the Uganda Clinical Guidelines 2023 (sections 1.1.6, 8.1.3 and 19.1.3).
+
+## Community setup (Firebase)
+
+The community needs a Firebase project. Sign-in uses the same project.
+
+1. Go to [console.firebase.google.com](https://console.firebase.google.com) and sign in. Click **Create a project**, name it (e.g. *Sukali Care*) and finish. Analytics is optional.
+2. **Sign-in:** Build > Authentication > Get started > Email/Password > Enable > Save.
+3. **Database:** Build > Firestore Database > Create database. Choose a location close to Uganda (e.g. `africa-south1`) and **production mode**.
+4. **Rules:** in Firestore, open the **Rules** tab. Replace everything with the contents of `firestore.rules` from this repository. Click **Publish**.
+5. **App keys:** Project settings (gear icon) > General > Your apps > Web (`</>`). Register an app. Copy `apiKey`, `authDomain` and `projectId` into `Models/FirebaseConfig.cs`.
+6. **Add a support group:** Firestore > Start collection > Collection ID `groups` > Auto-ID. Add these fields (all type *string*): `name`, `description`, `kind` (`in-person`, `online` or `both`), `facility`, `district`, `meetingDay`, `meetingTime`, `contactName`, `contactPhone`.
+7. **Make a moderator:** create an account in the app first. Then in Authentication > Users, copy that person's *User UID*. In Firestore, start a collection `moderators` and add a document whose **Document ID is that UID** (add any field, e.g. `role` = `moderator`).
+
+Moderators can hide and show posts from inside the app. Reported posts appear in the `reports` collection in Firestore.
+
+**Data protection.** Group messages are health information. Before inviting patients, agree a privacy notice and consent wording in line with the Uganda Data Protection and Privacy Act, 2019. If the app is part of a study, include the community in your ethics approval.
+
 ## Backend
 
 The app calls a REST API for user profiles, readings, devices and the library. The base address is set in `Models/Stores.cs` (`BaseUrl`). It currently points to a temporary ngrok address, so those features only work while that server is running. The backend code is not in this repository.
@@ -70,4 +92,6 @@ The app calls a REST API for user profiles, readings, devices and the library. T
 | `Models/` | Data models and settings keys |
 | `Services/` | Bluetooth, database, Firebase, API and background job |
 | `Converters/` | Unit conversion and reading colours |
+| `Resources/Raw/health_content.json` | Health information articles |
+| `firestore.rules` | Community database security rules |
 | `Platforms/Android/` | Android Bluetooth and permissions |

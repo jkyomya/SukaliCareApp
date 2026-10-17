@@ -31,17 +31,17 @@
                                    Glyph={x:Static m:MaterialRegular.Electric_meter}}"
             Route="ReadingsView" />
         <ShellContent
-            Title="Devices"
-            ContentTemplate="{DataTemplate local:DevicesView}"
+            Title="Learn"
+            ContentTemplate="{DataTemplate local:HealthInfoView}"
             Icon="{FontImageSource FontFamily=MaterialRegular,
-                                   Glyph={x:Static m:MaterialRegular.Watch}}"
-            Route="DevicesView" />
+                                   Glyph={x:Static m:MaterialRegular.Menu_book}}"
+            Route="HealthInfoView" />
         <ShellContent
-            Title="Feeds"
-            ContentTemplate="{DataTemplate local:LibraryView}"
+            Title="Community"
+            ContentTemplate="{DataTemplate local:CommunityView}"
             Icon="{FontImageSource FontFamily=MaterialRegular,
-                                   Glyph={x:Static m:MaterialRegular.My_library_books}}"
-            Route="LibraryView" />
+                                   Glyph={x:Static m:MaterialRegular.Groups}}"
+            Route="CommunityView" />
         <ShellContent
             Title="Settings"
             ContentTemplate="{DataTemplate local:PreferencesView}"

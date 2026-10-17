@@ -48,6 +48,8 @@ namespace SukaliCareApp
             builder.Services.AddScoped<FirebaseService>();
             builder.Services.AddSingleton(MopupService.Instance);
             builder.Services.AddTransient<HttpProxyService>();
+            builder.Services.AddSingleton<HealthContentService>();
+            builder.Services.AddSingleton<CommunityService>();
 #if ANDROID || IOS
             builder.Services.AddScoped<AppNotificationService>();
 #endif
@@ -93,6 +95,10 @@ namespace SukaliCareApp
             builder.Services.AddTransient<MainViewModel>();
             builder.Services.AddSingleton<IntroViewModel>();
             builder.Services.AddTransient<CompleteAccountViewModel>();
+            builder.Services.AddSingleton<HealthInfoViewModel>();
+            builder.Services.AddTransient<HealthArticleViewModel>();
+            builder.Services.AddSingleton<CommunityViewModel>();
+            builder.Services.AddTransient<GroupDetailViewModel>();
 
             return builder;
         }
@@ -108,6 +114,10 @@ namespace SukaliCareApp
             builder.Services.AddScoped<ReadingsView>();
             builder.Services.AddTransient<SignupView>();
             builder.Services.AddSingleton<DashboardView>();
+            builder.Services.AddSingleton<HealthInfoView>();
+            builder.Services.AddTransient<HealthArticleView>();
+            builder.Services.AddSingleton<CommunityView>();
+            builder.Services.AddTransient<GroupDetailView>();
 
             return builder;
         }

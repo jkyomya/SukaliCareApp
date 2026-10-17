@@ -1,0 +1,66 @@
+rules_version = '2';
+
+// Security rules for the Sukali Care community.
+// Paste into Firebase console > Firestore Database > Rules, then Publish.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+    function isModerator() {
+      return signedIn()
+        && exists(/databases/$(database)/documents/moderators/$(request.auth.uid));
+    }
+    function isMember(groupId) {
+      return signedIn()
+        && exists(/databases/$(database)/documents/groups/$(groupId)/members/$(request.auth.uid));
+    }
+
+    // Moderators are added by hand in the console. Users may only check themselves.
+    match /moderators/{uid} {
+      allow read: if signedIn() && request.auth.uid == uid;
+      allow write: if false;
+    }
+
+    match /groups/{groupId} {
+      // Any signed-in user can see the list of groups. Only moderators change them.
+      allow read: if signedIn();
+      allow write: if isModerator();
+
+      match /members/{uid} {
+        allow read: if (signedIn() && request.auth.uid == uid) || isMember(groupId) || isModerator();
+        allow create: if signedIn() && request.auth.uid == uid
+          && request.resource.data.keys().hasOnly(['displayName', 'joinedAt'])
+          && request.resource.data.displayName is string
+          && request.resource.data.displayName.size() <= 40;
+        allow update: if false;
+        allow delete: if (signedIn() && request.auth.uid == uid) || isModerator();
+      }
+
+      match /posts/{postId} {
+        // Only members (and moderators) can read the group chat.
+        allow read: if isMember(groupId) || isModerator();
+        allow create: if isMember(groupId)
+          && request.resource.data.keys().hasOnly(['authorUid', 'authorName', 'text', 'createdAt', 'hidden'])
+          && request.resource.data.authorUid == request.auth.uid
+          && request.resource.data.text is string
+          && request.resource.data.text.size() > 0
+          && request.resource.data.text.size() <= 1000
+          && request.resource.data.hidden == false;
+        // Moderators can only change the "hidden" flag.
+        allow update: if isModerator()
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['hidden']);
+        // Authors can delete their own posts. Moderators can delete any post.
+        allow delete: if isModerator()
+          || (signedIn() && resource.data.authorUid == request.auth.uid);
+      }
+    }
+
+    // Members can report a post. Only moderators can read reports.
+    match /reports/{reportId} {
+      allow create: if signedIn() && request.resource.data.reporterUid == request.auth.uid;
+      allow read, update, delete: if isModerator();
+    }
+  }
+}
