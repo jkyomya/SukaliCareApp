@@ -69,7 +69,7 @@ public partial class CGMReadingsViewModel : BaseViewModel, IRecipient<DataReceiv
     };
 
     public Margin DrawMargin { get; } = new Margin(8, 10, 40, 40);
-    private static bool IsStandard() => JsonSerializer.Deserialize<UserPreferences>(Preferences.Get(Stores.preferenceStore, null)).Units == "mmol/l";
+    private static bool IsStandard() => UnitsConveter.IsMmolL(UnitsConveter.PreferredUnit());
     [ObservableProperty]
     RectangularSection[] sections;
 
@@ -118,8 +118,9 @@ public partial class CGMReadingsViewModel : BaseViewModel, IRecipient<DataReceiv
                     Application.Current.RequestedTheme == AppTheme.Light ?
                      new SKColor(255, 225, 230) :
                      SKColors.HotPink),
-                Yi = IsStandard() ? 14 : 252,
-                Yj = IsStandard() ? 42 : 756,
+                // Shade the high zone: above 10.0 mmol/L (180 mg/dL), the top of the target range.
+                Yi = IsStandard() ? 10.0 : 180,
+                Yj = IsStandard() ? 33.3 : 600,
 
             }
         ];
@@ -132,16 +133,36 @@ public partial class CGMReadingsViewModel : BaseViewModel, IRecipient<DataReceiv
                 Items.Clear();
                 ChartValues.Clear();
 #if ANDROID || IOS
-                var highest = result.MaxBy(m => m.GlucoseValue.Value);
-                if (converter.ConvertValue(highest.GlucoseValue) < converter.ConvertValue(new GlucoseValue(12, "mmol/l")))
+                // Alert on the most recent reading. Skip if there are no readings yet,
+                // which previously crashed the screen on first use.
+                var latest = result?.Where(r => r?.GlucoseValue is not null)
+                    .MaxBy(r => r.ReadingDate);
+                if (latest is not null)
                 {
-                    notificationService.PublishNotification($"Normal blood sugar level ({highest.GlucoseValue.Value} {highest.GlucoseValue.Unit})", "Current readings", "Your glucose readings are ready and the latest one seems okay. Open app to see more",
-                    DateTime.Now, NotificationRepeat.No, TimeSpan.FromHours(1));
-                }
-                else if (converter.ConvertValue(highest.GlucoseValue) > converter.ConvertValue(new GlucoseValue(12, "mmol/l")))
-                {
-                    notificationService.PublishNotification($"High blood sugar ({highest.GlucoseValue.Value} {highest.GlucoseValue.Unit})", "Take caution", "Your glucose blood sugar seems to be out of control. Please take adequate measures to correct this",
-                    DateTime.Now, NotificationRepeat.No, TimeSpan.FromHours(1));
+                    string shown = converter.Convert(latest.GlucoseValue, typeof(string), null,
+                        System.Globalization.CultureInfo.CurrentCulture) as string;
+                    float mmol = UnitsConveter.IsMmolL(latest.GlucoseValue.Unit)
+                        ? latest.GlucoseValue.Value
+                        : latest.GlucoseValue.Value / 18f;
+
+                    if (mmol < ValueToColorConvert.LowMmol)
+                    {
+                        notificationService.PublishNotification($"Low blood sugar ({shown})", "Take action now",
+                            "Your latest glucose reading is low. Take fast-acting sugar and recheck in 15 minutes. Seek care if you feel unwell.",
+                            DateTime.Now, NotificationRepeat.No, TimeSpan.FromHours(1));
+                    }
+                    else if (mmol > ValueToColorConvert.HighMmol)
+                    {
+                        notificationService.PublishNotification($"High blood sugar ({shown})", "Take caution",
+                            "Your latest glucose reading is high. Follow your care plan and contact your health worker if it stays high.",
+                            DateTime.Now, NotificationRepeat.No, TimeSpan.FromHours(1));
+                    }
+                    else
+                    {
+                        notificationService.PublishNotification($"Blood sugar in range ({shown})", "Current readings",
+                            "Your latest glucose reading is within the target range. Open the app to see more.",
+                            DateTime.Now, NotificationRepeat.No, TimeSpan.FromHours(1));
+                    }
                 }
 
 #endif
