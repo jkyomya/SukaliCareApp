@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="SukaliCareApp.Views.HealthArticleView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="{Binding Article.Title}">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Command="{Binding ShareCommand}" Text="Share" />
+    </ContentPage.ToolbarItems>
+    <ScrollView>
+        <VerticalStackLayout Padding="16" Spacing="12">
+            <Label
+                FontAttributes="Bold"
+                FontSize="22"
+                Style="{x:StaticResource LabelDark}"
+                Text="{Binding Article.Title}" />
+
+            <!--  Key points box  -->
+            <Border
+                Padding="16"
+                BackgroundColor="{AppThemeBinding Light={x:StaticResource PrimaryContainer},
+                                                  Dark={x:StaticResource Gray600}}"
+                StrokeShape="RoundRectangle 12"
+                StrokeThickness="0">
+                <VerticalStackLayout Spacing="6">
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="15"
+                        Text="Key points"
+                        TextColor="{x:StaticResource Primary}" />
+                    <VerticalStackLayout BindableLayout.ItemsSource="{Binding Article.KeyPoints}" Spacing="4">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <Label
+                                    FontSize="15"
+                                    Style="{x:StaticResource LabelDark}"
+                                    Text="{Binding ., StringFormat='• {0}'}" />
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+
+            <!--  Sections  -->
+            <VerticalStackLayout BindableLayout.ItemsSource="{Binding Article.Sections}" Spacing="16">
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate>
+                        <VerticalStackLayout Spacing="4">
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="17"
+                                Style="{x:StaticResource LabelDark}"
+                                Text="{Binding Heading}" />
+                            <Label
+                                FontSize="16"
+                                LineHeight="1.3"
+                                Style="{x:StaticResource LabelDark}"
+                                Text="{Binding Body}" />
+                        </VerticalStackLayout>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </VerticalStackLayout>
+
+            <Label
+                Margin="0,16,0,0"
+                FontAttributes="Italic"
+                FontSize="12"
+                Text="This information supports, but does not replace, advice from your health worker."
+                TextColor="{x:StaticResource Gray400}" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

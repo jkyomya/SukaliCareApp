@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="SukaliCareApp.Views.GroupDetailView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Name="Page"
+    Title="{Binding Group.Name}">
+    <Grid RowDefinitions="*,Auto">
+
+        <RefreshView Command="{Binding RefreshCommand}" IsRefreshing="{Binding IsBusy}">
+            <CollectionView Margin="16,0" ItemsSource="{Binding Posts}">
+                <CollectionView.Header>
+                    <VerticalStackLayout Padding="0,16,0,8" Spacing="6">
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="20"
+                            Style="{x:StaticResource LabelDark}"
+                            Text="{Binding Group.Name}" />
+                        <Label
+                            FontSize="13"
+                            Text="{Binding Group.KindText}"
+                            TextColor="{x:StaticResource Primary}" />
+                        <Label
+                            FontSize="15"
+                            Style="{x:StaticResource LabelDark}"
+                            Text="{Binding Group.Description}" />
+                        <Label
+                            FontSize="15"
+                            IsVisible="{Binding Group.HasLocation}"
+                            Style="{x:StaticResource LabelDark}"
+                            Text="{Binding Group.LocationText, StringFormat='Where: {0}'}" />
+                        <Label
+                            FontSize="15"
+                            IsVisible="{Binding Group.HasMeeting}"
+                            Style="{x:StaticResource LabelDark}"
+                            Text="{Binding Group.MeetingText, StringFormat='When: {0}'}" />
+                        <Label
+                            FontSize="15"
+                            IsVisible="{Binding Group.HasContact}"
+                            Style="{x:StaticResource LabelDark}"
+                            Text="{Binding Group.ContactName, StringFormat='Contact: {0}'}" />
+                        <Button
+                            Command="{Binding CallContactCommand}"
+                            IsVisible="{Binding Group.HasContact}"
+                            Style="{x:StaticResource BtnPrimaryOutline}"
+                            Text="Call the group contact" />
+
+                        <Button
+                            Margin="0,8,0,0"
+                            Command="{Binding JoinCommand}"
+                            IsVisible="{Binding IsNotMember}"
+                            Style="{x:StaticResource BtnPrimary}"
+                            Text="Join this group" />
+                        <Label
+                            FontSize="12"
+                            IsVisible="{Binding IsNotMember}"
+                            Text="Members can read and post messages in the group chat."
+                            TextColor="{x:StaticResource Gray500}" />
+
+                        <Grid
+                            Margin="0,8,0,0"
+                            ColumnDefinitions="*,Auto"
+                            IsVisible="{Binding IsMember}">
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="16"
+                                Style="{x:StaticResource LabelDark}"
+                                Text="Group chat"
+                                VerticalOptions="Center" />
+                            <Button
+                                Grid.Column="1"
+                                Command="{Binding LeaveCommand}"
+                                FontSize="12"
+                                Style="{x:StaticResource BtnPrimaryOutline}"
+                                Text="Leave group" />
+                        </Grid>
+                        <Label
+                            FontAttributes="Italic"
+                            FontSize="12"
+                            IsVisible="{Binding IsMember}"
+                            Text="Tap a message to report it. In an emergency, go to the nearest health facility."
+                            TextColor="{x:StaticResource Gray500}" />
+                        <Label
+                            FontAttributes="Italic"
+                            FontSize="14"
+                            IsVisible="{Binding HasStatus}"
+                            Text="{Binding StatusMessage}"
+                            TextColor="{x:StaticResource Gray500}" />
+                    </VerticalStackLayout>
+                </CollectionView.Header>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border
+                            Margin="0,0,0,8"
+                            Padding="12"
+                            BackgroundColor="{AppThemeBinding Light={x:StaticResource Gray100},
+                                                              Dark={x:StaticResource Gray600}}"
+                            StrokeShape="RoundRectangle 10"
+                            StrokeThickness="0">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={x:Reference Page}, Path=BindingContext.PostOptionsCommand}" CommandParameter="{Binding .}" />
+                            </Border.GestureRecognizers>
+                            <VerticalStackLayout Spacing="2">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <Label
+                                        FontAttributes="Bold"
+                                        FontSize="14"
+                                        Text="{Binding AuthorName}"
+                                        TextColor="{x:StaticResource Primary}" />
+                                    <Label
+                                        Grid.Column="1"
+                                        FontSize="12"
+                                        Text="{Binding TimeText}"
+                                        TextColor="{x:StaticResource Gray500}" />
+                                </Grid>
+                                <Label
+                                    FontSize="15"
+                                    Style="{x:StaticResource LabelDark}"
+                                    Text="{Binding Text}" />
+                                <Label
+                                    FontAttributes="Italic"
+                                    FontSize="12"
+                                    IsVisible="{Binding Hidden}"
+                                    Text="Hidden by a moderator"
+                                    TextColor="{x:StaticResource Error}" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+
+        <!--  Message box, shown to members only  -->
+        <Grid
+            Grid.Row="1"
+            Padding="12,8"
+            ColumnDefinitions="*,Auto"
+            ColumnSpacing="8"
+            IsVisible="{Binding IsMember}">
+            <Editor
+                AutoSize="TextChanges"
+                MaxLength="1000"
+                MaximumHeightRequest="120"
+                Placeholder="Write a message"
+                Text="{Binding NewPostText}" />
+            <Button
+                Grid.Column="1"
+                Command="{Binding SendCommand}"
+                Style="{x:StaticResource BtnPrimary}"
+                Text="Send"
+                VerticalOptions="End" />
+        </Grid>
+    </Grid>
+</ContentPage>

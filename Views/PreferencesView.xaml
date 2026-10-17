@@ -67,6 +67,30 @@
                 Margin="0,16,0,0"
                 FontAttributes="Bold"
                 Style="{x:StaticResource LabelDark}"
+                Text="Glucose device" />
+            <VerticalStackLayout Margin="0" Padding="0">
+                <Label
+                    Margin="0,8,0,0"
+                    Style="{x:StaticResource LabelDark}"
+                    Text="Manage devices" />
+                <Label
+                    Margin="0,4,0,8"
+                    FontSize="14"
+                    Style="{x:StaticResource LabelDark}"
+                    Text="Pair, connect or change your glucose monitor"
+                    TextColor="{x:StaticResource Gray400}" />
+                <VerticalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding OpenDevicesCommand}" />
+                </VerticalStackLayout.GestureRecognizers>
+            </VerticalStackLayout>
+            <BoxView
+                BackgroundColor="{x:StaticResource Gray100}"
+                HeightRequest="1"
+                HorizontalOptions="Fill" />
+            <Label
+                Margin="0,16,0,0"
+                FontAttributes="Bold"
+                Style="{x:StaticResource LabelDark}"
                 Text="Preferences" />
             <VerticalStackLayout Margin="0" Padding="0">
                 <Label

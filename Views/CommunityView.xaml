@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="SukaliCareApp.Views.CommunityView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Name="Page"
+    Title="Support groups">
+    <RefreshView Command="{Binding RefreshCommand}" IsRefreshing="{Binding IsBusy}">
+        <CollectionView Margin="16,0" ItemsSource="{Binding Groups}">
+            <CollectionView.Header>
+                <VerticalStackLayout Padding="0,16,0,8" Spacing="8">
+                    <Label
+                        FontSize="15"
+                        Style="{x:StaticResource LabelDark}"
+                        Text="Meet and talk with other people living with diabetes. Join a group to read and post messages." />
+                    <Label
+                        FontAttributes="Italic"
+                        FontSize="14"
+                        IsVisible="{Binding HasStatus}"
+                        Text="{Binding StatusMessage}"
+                        TextColor="{x:StaticResource Gray500}" />
+                </VerticalStackLayout>
+            </CollectionView.Header>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border
+                        Margin="0,0,0,12"
+                        Padding="16"
+                        BackgroundColor="{AppThemeBinding Light={x:StaticResource PrimaryContainer},
+                                                          Dark={x:StaticResource Gray600}}"
+                        StrokeShape="RoundRectangle 12"
+                        StrokeThickness="0">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding Source={x:Reference Page}, Path=BindingContext.OpenGroupCommand}" CommandParameter="{Binding .}" />
+                        </Border.GestureRecognizers>
+                        <VerticalStackLayout Spacing="4">
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="17"
+                                Style="{x:StaticResource LabelDark}"
+                                Text="{Binding Name}" />
+                            <Label
+                                FontSize="13"
+                                Text="{Binding KindText}"
+                                TextColor="{x:StaticResource Primary}" />
+                            <Label
+                                FontSize="14"
+                                IsVisible="{Binding HasLocation}"
+                                Style="{x:StaticResource LabelDark}"
+                                Text="{Binding LocationText, StringFormat='Where: {0}'}" />
+                            <Label
+                                FontSize="14"
+                                IsVisible="{Binding HasMeeting}"
+                                Style="{x:StaticResource LabelDark}"
+                                Text="{Binding MeetingText, StringFormat='When: {0}'}" />
+                        </VerticalStackLayout>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </RefreshView>
+</ContentPage>

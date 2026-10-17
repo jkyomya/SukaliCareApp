@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="SukaliCareApp.Views.HealthInfoView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:SukaliCareApp.ViewModels"
+    x:Name="Page"
+    Title="Health information">
+    <ScrollView>
+        <VerticalStackLayout Padding="16" Spacing="16">
+
+            <Label
+                Style="{x:StaticResource LabelDark}"
+                FontSize="15"
+                Text="Practical guidance on living well with diabetes. Works without internet." />
+
+            <!--  One card per topic, listing its articles  -->
+            <VerticalStackLayout BindableLayout.ItemsSource="{Binding Topics}" Spacing="16">
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate>
+                        <Border
+                            Padding="16"
+                            BackgroundColor="{AppThemeBinding Light={x:StaticResource PrimaryContainer},
+                                                              Dark={x:StaticResource Gray600}}"
+                            StrokeShape="RoundRectangle 12"
+                            StrokeThickness="0">
+                            <VerticalStackLayout Spacing="4">
+                                <Label
+                                    FontAttributes="Bold"
+                                    FontSize="18"
+                                    Style="{x:StaticResource LabelDark}"
+                                    Text="{Binding Title}" />
+                                <Label
+                                    Margin="0,0,0,8"
+                                    FontSize="14"
+                                    Text="{Binding Summary}"
+                                    TextColor="{x:StaticResource Gray500}" />
+
+                                <VerticalStackLayout BindableLayout.ItemsSource="{Binding Articles}">
+                                    <BindableLayout.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Padding="0,10" ColumnDefinitions="*,Auto">
+                                                <Grid.GestureRecognizers>
+                                                    <TapGestureRecognizer Command="{Binding Source={x:Reference Page}, Path=BindingContext.OpenArticleCommand}" CommandParameter="{Binding .}" />
+                                                </Grid.GestureRecognizers>
+                                                <VerticalStackLayout Spacing="2">
+                                                    <Label
+                                                        FontAttributes="Bold"
+                                                        FontSize="16"
+                                                        Text="{Binding Title}"
+                                                        TextColor="{x:StaticResource Primary}" />
+                                                    <Label
+                                                        FontSize="13"
+                                                        Text="{Binding Summary}"
+                                                        TextColor="{x:StaticResource Gray500}" />
+                                                </VerticalStackLayout>
+                                                <Label
+                                                    Grid.Column="1"
+                                                    Margin="8,0,0,0"
+                                                    FontSize="22"
+                                                    Text="›"
+                                                    TextColor="{x:StaticResource Gray400}"
+                                                    VerticalOptions="Center" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </BindableLayout.ItemTemplate>
+                                </VerticalStackLayout>
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </VerticalStackLayout>
+
+            <Button
+                Command="{Binding OpenOnlinePostsCommand}"
+                Style="{x:StaticResource BtnPrimaryOutline}"
+                Text="Online health posts" />
+
+            <Label
+                FontAttributes="Italic"
+                FontSize="12"
+                Text="{Binding Disclaimer}"
+                TextColor="{x:StaticResource Gray400}" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
