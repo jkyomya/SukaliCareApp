@@ -145,7 +145,7 @@ public partial class DashboardViewModel : BaseViewModel, IRecipient<DeviceConnec
 
 #if __MOBILE__
             var access = await _jobManager.RequestAccess();
-            if (access != AccessState.Available)
+            if (access != Shiny.AccessState.Available)
             {
                 await Shell.Current.DisplayAlert("Error", "Job permissions failed: " + access, "OK");
                 return;
