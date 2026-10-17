@@ -38,6 +38,12 @@ namespace SukaliCareApp.ViewModels
         }
 
         [RelayCommand]
+        public static async Task OpenDevices()
+        {
+            await Shell.Current.GoToAsync(nameof(DevicesView));
+        }
+
+        [RelayCommand]
         public async Task ChangeUnits()
         {
             var result = await Shell.Current.DisplayActionSheet("Change your glucose units", "Cancel", null, ["mmol/l", "mg/dl"]);
