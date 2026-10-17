@@ -105,9 +105,6 @@ public partial class DashboardViewModel : BaseViewModel, IRecipient<DeviceConnec
         }
 
         WeakReferenceMessenger.Default.RegisterAll(this);
-
-        var sample = _adapter.WhenAnyValue()
-        
     }
 
     ObservableCollection<DateTimePoint> ChartValues { get; } = new ObservableCollection<DateTimePoint>();
