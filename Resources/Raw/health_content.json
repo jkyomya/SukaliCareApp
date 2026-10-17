@@ -1,0 +1,579 @@
+{
+  "version": "2026-10-draft-1",
+  "reviewStatus": "DRAFT. For clinical review before use with patients.",
+  "disclaimer": "This information supports, but does not replace, advice from your doctor, nurse, pharmacist or dietitian. Always follow your own care plan.",
+  "topics": [
+    {
+      "id": "self-management",
+      "title": "Diabetes self-management",
+      "summary": "Daily care, low and high sugar, medicines and check-ups.",
+      "glyph": "favorite",
+      "articles": [
+        {
+          "id": "sm-understanding",
+          "title": "Understanding diabetes",
+          "summary": "What diabetes is and why daily care matters.",
+          "sections": [
+            {
+              "heading": "What is diabetes?",
+              "body": "Diabetes means there is too much sugar (glucose) in your blood. Your body uses a hormone called insulin to move sugar from the blood into the cells for energy. In diabetes, the body does not make enough insulin, or cannot use it well."
+            },
+            {
+              "heading": "Types of diabetes",
+              "body": "• Type 1: the body makes little or no insulin. Insulin injections are needed every day.\n• Type 2: the most common type. The body does not use insulin well. It is managed with healthy eating, activity, tablets and sometimes insulin.\n• Gestational diabetes: high sugar first found in pregnancy. Mother and baby need follow-up."
+            },
+            {
+              "heading": "Why control matters",
+              "body": "High sugar over many years can damage the eyes, kidneys, nerves, feet, heart and blood vessels. Good control greatly lowers these risks. You are the most important member of your care team."
+            },
+            {
+              "heading": "Signs of high sugar",
+              "body": "• Passing urine often, especially at night\n• Strong thirst\n• Tiredness\n• Weight loss without trying\n• Blurred vision\n• Wounds that heal slowly"
+            }
+          ],
+          "keyPoints": [
+            "Diabetes can be controlled. It cannot yet be cured.",
+            "Daily habits make the biggest difference.",
+            "Keep every clinic appointment."
+          ]
+        },
+        {
+          "id": "sm-targets",
+          "title": "Your glucose targets",
+          "summary": "What the colours in the app mean.",
+          "sections": [
+            {
+              "heading": "Target range",
+              "body": "For most adults with diabetes, the target range is 3.9 to 10.0 mmol/L. The aim is to spend most of the day (more than 7 in every 10 hours) in this range. Your health worker may set a different target for you. Older people and pregnant women often have different targets."
+            },
+            {
+              "heading": "What the colours mean",
+              "body": "• Dark red, below 3.0 mmol/L: very low. Act now.\n• Red, 3.0 to 3.8 mmol/L: low. Treat it.\n• Green, 3.9 to 10.0 mmol/L: in range.\n• Amber, 10.1 to 13.9 mmol/L: high.\n• Red, above 13.9 mmol/L: very high. Check again and follow your care plan."
+            },
+            {
+              "heading": "HbA1c",
+              "body": "HbA1c is a blood test that shows your average sugar over about 3 months. For many adults the target is below 7% (53 mmol/mol). Ask for it every 3 to 6 months."
+            },
+            {
+              "heading": "mmol/L and mg/dL",
+              "body": "Uganda uses mmol/L. Some meters show mg/dL. To change mg/dL to mmol/L, divide by 18. For example, 180 mg/dL is 10.0 mmol/L. You can choose your unit in Settings."
+            }
+          ],
+          "keyPoints": [
+            "Aim for 3.9 to 10.0 mmol/L most of the day.",
+            "Know your personal target from your health worker.",
+            "Ask for an HbA1c test every 3 to 6 months."
+          ]
+        },
+        {
+          "id": "sm-low-sugar",
+          "title": "Low blood sugar (hypoglycaemia)",
+          "summary": "How to spot it and treat it fast.",
+          "sections": [
+            {
+              "heading": "What is low sugar?",
+              "body": "Low sugar is a reading below 3.9 mmol/L. Below 3.0 mmol/L is serious. It is most common in people who use insulin or tablets like glibenclamide or gliclazide."
+            },
+            {
+              "heading": "Warning signs",
+              "body": "• Shaking or trembling\n• Sweating\n• Fast heartbeat\n• Hunger\n• Feeling dizzy, confused or irritable\n• Headache\n• Blurred vision\n\nSome people, especially older people, feel no warning signs. Check your sugar if you feel unwell."
+            },
+            {
+              "heading": "Treat it: the 15-15 rule",
+              "body": "1. Take 15 grams of fast sugar. For example:\n   • 3 to 4 level teaspoons of sugar stirred in water, or\n   • Half a glass (about 150 ml) of soda or fruit juice (not diet), or\n   • 3 to 4 glucose sweets.\n2. Wait 15 minutes, then check again.\n3. If still below 3.9 mmol/L, repeat step 1.\n4. When it is back in range, eat a snack or your next meal, such as bread, a cup of porridge or a small portion of food."
+            },
+            {
+              "heading": "Emergency",
+              "body": "If the person is unconscious, having a fit, or cannot swallow safely:\n• Do not put food or drink in their mouth.\n• Lay them on their side.\n• Take them to the nearest health facility immediately."
+            },
+            {
+              "heading": "Prevent low sugar",
+              "body": "• Do not skip meals after taking insulin or sugar-lowering tablets.\n• Eat something before heavy work or long walks.\n• Limit alcohol, and never drink on an empty stomach.\n• Always carry sugar or sweets with you.\n• Tell family members how to help you."
+            }
+          ],
+          "keyPoints": [
+            "Below 3.9 mmol/L is low. Treat it at once.",
+            "15 grams of fast sugar, wait 15 minutes, check again.",
+            "Unconscious? Nothing by mouth. Go to a health facility."
+          ]
+        },
+        {
+          "id": "sm-sick-days",
+          "title": "High sugar and sick days",
+          "summary": "What to do when sugar is high or you are unwell.",
+          "sections": [
+            {
+              "heading": "When sugar is high",
+              "body": "If your sugar is above 13.9 mmol/L:\n• Drink plenty of clean water.\n• Check again in 2 to 4 hours.\n• Think about the cause: missed medicine, a big meal, illness or stress.\n• Do not take extra medicine unless your health worker told you how."
+            },
+            {
+              "heading": "Sick-day rules",
+              "body": "Illness such as malaria, flu or infection often raises sugar.\n• Keep taking your insulin, even if you eat less. Never stop insulin without advice.\n• Check your sugar more often, every 2 to 4 hours if you can.\n• Drink small sips of water often.\n• If you cannot eat, take light foods or drinks with some carbohydrate, such as porridge.\n• Ask your health worker whether to pause some tablets, such as metformin, if you are vomiting or have diarrhoea."
+            },
+            {
+              "heading": "Go to a health facility now if",
+              "body": "• You are vomiting and cannot keep fluids down\n• Your sugar stays above 16.7 mmol/L (or the meter shows HI) after two checks\n• You have deep, fast breathing, a fruity smell on the breath, or stomach pain\n• You are very drowsy or confused\n• You have a fever for more than 2 days"
+            }
+          ],
+          "keyPoints": [
+            "Never stop insulin when you are sick.",
+            "Drink water and check sugar more often.",
+            "Vomiting, confusion or fast breathing: go to a health facility."
+          ]
+        },
+        {
+          "id": "sm-medicines",
+          "title": "Taking your medicines",
+          "summary": "Tablets, insulin storage and safe injections.",
+          "sections": [
+            {
+              "heading": "Take them every day",
+              "body": "Diabetes medicines work best when taken every day at the same times. Do not stop them when you feel well. Feeling well often means the medicine is working.\n\nUse a phone alarm or link doses to a daily habit, like morning tea. Collect a refill before you run out."
+            },
+            {
+              "heading": "Common medicines",
+              "body": "• Metformin: take with or after food to reduce stomach upset.\n• Glibenclamide or gliclazide: take before food. These can cause low sugar, so do not skip meals.\n• Insulin: follow the dose and times your health worker gave you.\n\nDo not share medicines. Do not buy diabetes medicines without a prescription. Avoid herbal products that claim to cure diabetes. Tell your health worker about any herbs you use."
+            },
+            {
+              "heading": "Storing insulin",
+              "body": "• Unopened insulin: keep in a fridge, not the freezer.\n• No fridge: keep it in a cool place, such as a clay pot with a damp cloth, out of the sun.\n• The vial or pen in use can stay at room temperature (below 30°C) for about 4 weeks.\n• Never freeze insulin. Do not leave it in a hot vehicle or in direct sun.\n• Throw it away if it looks cloudy when it should be clear, or has lumps."
+            },
+            {
+              "heading": "Safe injections",
+              "body": "• Change the spot each time: belly, thighs, upper arms.\n• Use a new needle each time if you can.\n• Put used needles in a hard plastic bottle with a lid. Return it to the health facility.\n• Never share needles or pens."
+            }
+          ],
+          "keyPoints": [
+            "Take medicines daily, even when you feel well.",
+            "Keep insulin cool. Never freeze it.",
+            "Rotate injection sites and dispose of needles safely."
+          ]
+        },
+        {
+          "id": "sm-feet",
+          "title": "Caring for your feet",
+          "summary": "Simple daily checks that prevent wounds and amputations.",
+          "sections": [
+            {
+              "heading": "Why feet need care",
+              "body": "Diabetes can reduce feeling in the feet and slow healing. A small cut or a jigger can become a serious wound without you noticing."
+            },
+            {
+              "heading": "Every day",
+              "body": "• Look at both feet, including the soles and between the toes. Use a mirror or ask a family member.\n• Wash with lukewarm water. Test the water with your elbow first.\n• Dry well, especially between the toes.\n• Apply a little lotion or petroleum jelly to dry skin, but not between the toes."
+            },
+            {
+              "heading": "Protect your feet",
+              "body": "• Do not walk barefoot, even at home or in the garden.\n• Wear closed shoes that fit well. Check inside shoes before wearing them.\n• Cut nails straight across.\n• Do not cut corns yourself or use razor blades.\n• Do not warm your feet near a fire or charcoal stove."
+            },
+            {
+              "heading": "See a health worker the same week if",
+              "body": "• You have a wound, blister, crack or jigger that is not healing\n• There is redness, swelling, warmth, pus or a bad smell\n• The skin changes colour\n\nAsk for a foot check at every clinic visit."
+            }
+          ],
+          "keyPoints": [
+            "Check your feet every day.",
+            "Never walk barefoot.",
+            "Get any wound checked quickly."
+          ]
+        },
+        {
+          "id": "sm-checkups",
+          "title": "Your regular check-ups",
+          "summary": "Tests that catch problems early.",
+          "sections": [
+            {
+              "heading": "At every visit",
+              "body": "• Blood sugar\n• Blood pressure. Many people with diabetes aim for below 130/80 mmHg. Ask your health worker for your target.\n• Weight and waist\n• Feet"
+            },
+            {
+              "heading": "Every 3 to 6 months",
+              "body": "• HbA1c"
+            },
+            {
+              "heading": "At least once a year",
+              "body": "• Eye check, to find damage early, before it affects your sight\n• Kidney tests: urine protein and a blood test (creatinine)\n• Cholesterol\n• Teeth and gums"
+            },
+            {
+              "heading": "Bring to each visit",
+              "body": "• Your medicines or the empty packets\n• Your glucose readings. Show the Readings screen in this app.\n• A list of questions"
+            }
+          ],
+          "keyPoints": [
+            "Check sugar, blood pressure, weight and feet at every visit.",
+            "Eyes and kidneys at least once a year.",
+            "Bring your readings to the clinic."
+          ]
+        },
+        {
+          "id": "sm-living-well",
+          "title": "Living well with diabetes",
+          "summary": "Stress, mood, alcohol, smoking and family support.",
+          "sections": [
+            {
+              "heading": "Your mood matters",
+              "body": "Living with diabetes can be tiring and worrying. Feeling low, losing interest in things, poor sleep or worry for more than 2 weeks may be depression or anxiety. These are common and treatable. Talk to your health worker. Joining a support group also helps."
+            },
+            {
+              "heading": "Alcohol",
+              "body": "Alcohol, including local brews, can cause low sugar many hours later, especially with insulin or glibenclamide. If you drink, drink little, never on an empty stomach, and check your sugar before sleeping."
+            },
+            {
+              "heading": "Smoking",
+              "body": "Smoking greatly raises the risk of heart attack, stroke, foot wounds and amputation in people with diabetes. Ask your health worker for help to stop."
+            },
+            {
+              "heading": "Family and friends",
+              "body": "Share your care plan with someone you trust. Teach them the signs of low sugar and how to help. Cook healthy meals for the whole family. Healthy eating protects them too."
+            }
+          ],
+          "keyPoints": [
+            "Low mood is common and treatable. Talk to someone.",
+            "Alcohol can cause late low sugar.",
+            "Involve your family in your care."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "weight",
+      "title": "Weight and activity",
+      "summary": "Healthy weight, waist size and staying active.",
+      "glyph": "directions_walk",
+      "articles": [
+        {
+          "id": "wt-why",
+          "title": "Why weight matters",
+          "summary": "Small losses bring big benefits.",
+          "sections": [
+            {
+              "heading": "The benefit",
+              "body": "For people with type 2 diabetes who carry extra weight, losing 5 to 10% of body weight lowers blood sugar, blood pressure and cholesterol. For someone who weighs 90 kg, that is 4.5 to 9 kg. Some people who lose more weight early in their diabetes can even bring their sugar back to normal without medicines, with medical support."
+            },
+            {
+              "heading": "Check your waist",
+              "body": "Fat around the belly is the most harmful. Measure around your waist, at the level of the belly button, after breathing out.\n• Men: aim for below 94 cm\n• Women: aim for below 80 cm"
+            },
+            {
+              "heading": "Body mass index (BMI)",
+              "body": "BMI is your weight (kg) divided by your height (m) squared. A healthy BMI for adults is 18.5 to 24.9. Ask your health worker to work it out for you."
+            },
+            {
+              "heading": "A note on weight loss",
+              "body": "Weight loss you did not plan, with thirst and passing urine often, can be a sign of high sugar. See your health worker. Do not try fasting or strict diets on insulin or glibenclamide without advice, because this can cause low sugar."
+            }
+          ],
+          "keyPoints": [
+            "Losing 5 to 10% of your weight helps your sugar.",
+            "Waist: men below 94 cm, women below 80 cm.",
+            "Unplanned weight loss needs a check-up."
+          ]
+        },
+        {
+          "id": "wt-active",
+          "title": "Getting active",
+          "summary": "How much activity, and ideas that fit daily life.",
+          "sections": [
+            {
+              "heading": "How much",
+              "body": "Aim for at least 150 minutes of moderate activity each week. That is 30 minutes on 5 days. Moderate means you breathe faster but can still talk. You can split it into 10-minute blocks.\n\nOn 2 days a week, add exercises that strengthen muscles."
+            },
+            {
+              "heading": "Ideas that count",
+              "body": "• Brisk walking to the market, church or work\n• Digging and weeding in the garden\n• Carrying water or firewood\n• Climbing hills\n• Cycling\n• Dancing\n• Sit-to-stand from a chair, wall push-ups, lifting jerrycans of water"
+            },
+            {
+              "heading": "Sit less",
+              "body": "Stand up and move for a few minutes every 30 minutes. A short walk after meals helps lower sugar."
+            },
+            {
+              "heading": "Stay safe",
+              "body": "• If you use insulin or glibenclamide, check your sugar before activity and carry sugar.\n• Wear closed shoes and check your feet after.\n• Drink water.\n• Start slowly if you have not been active. Talk to your health worker if you have chest pain, heart disease or eye problems."
+            }
+          ],
+          "keyPoints": [
+            "150 minutes a week: 30 minutes on 5 days.",
+            "Garden work and brisk walking count.",
+            "Carry sugar if you use insulin or glibenclamide."
+          ]
+        },
+        {
+          "id": "wt-steps",
+          "title": "Practical steps to lose weight",
+          "summary": "Changes that work at home.",
+          "sections": [
+            {
+              "heading": "Eat smarter, not less food overall",
+              "body": "• Use the healthy plate: half vegetables, a quarter starch, a quarter protein.\n• Serve starch the size of your fist.\n• Use a smaller plate.\n• Eat slowly. Stop when you are comfortable, not full.\n• Do not go back for second helpings of starch."
+            },
+            {
+              "heading": "Cut hidden sugar and fat",
+              "body": "• Replace soda and packaged juice with water.\n• Reduce sugar in tea and porridge step by step, until you need none.\n• Boil, steam or stew instead of frying. Avoid chips, chapati, mandazi and samosas most days.\n• Use a small amount of cooking oil or ghee."
+            },
+            {
+              "heading": "Other habits",
+              "body": "• Sleep 7 to 8 hours.\n• Eat regular meals. Skipping meals often leads to overeating later.\n• Keep healthy snacks: fruit, a few groundnuts, boiled maize or roasted soybeans."
+            }
+          ],
+          "keyPoints": [
+            "Fist-sized starch, half a plate of vegetables.",
+            "Water instead of soda and juice.",
+            "Boil or steam instead of frying."
+          ]
+        },
+        {
+          "id": "wt-goals",
+          "title": "Setting goals you can keep",
+          "summary": "Small, specific steps add up.",
+          "sections": [
+            {
+              "heading": "Start small",
+              "body": "Choose one change at a time. Make it specific. For example: \"I will walk for 20 minutes after supper on Monday, Wednesday and Friday\", or \"I will take tea with 1 spoon of sugar instead of 3\"."
+            },
+            {
+              "heading": "Track it",
+              "body": "Weigh yourself once a week, on the same day and at the same time. Look at your glucose trends on the Readings screen. Write down what worked."
+            },
+            {
+              "heading": "Get support",
+              "body": "Change is easier together. Walk with a friend, cook with your family, or share goals in your support group."
+            }
+          ],
+          "keyPoints": [
+            "One small, specific change at a time.",
+            "Weigh weekly, not daily.",
+            "Share goals with family or your group."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nutrition",
+      "title": "Nutrition: eating well in southwestern Uganda",
+      "summary": "A diabetes-friendly diet with the foods we grow and eat.",
+      "glyph": "restaurant",
+      "articles": [
+        {
+          "id": "nu-plate",
+          "title": "The healthy plate",
+          "summary": "A simple way to build every meal.",
+          "sections": [
+            {
+              "heading": "Build your plate",
+              "body": "• Half the plate: vegetables. Dodo (amaranth), nakati, cabbage, sukuma wiki, pumpkin leaves, eggplant (entula), carrots, tomatoes, onions, mushrooms.\n• A quarter: starch. Matooke, millet bread, sorghum, sweet potato, Irish potato, cassava, posho or rice. About the size of your fist.\n• A quarter: protein. Beans, peas, groundnuts, fish, eggs, chicken or lean meat.\n• Drink water."
+            },
+            {
+              "heading": "Why it works",
+              "body": "Vegetables and protein fill you up and slow down how fast sugar enters the blood. Keeping starch to a quarter of the plate stops big sugar rises after meals."
+            },
+            {
+              "heading": "You do not need special foods",
+              "body": "There is no need for expensive \"diabetic\" products. The healthy plate uses ordinary local foods. The same meal is good for the whole family."
+            }
+          ],
+          "keyPoints": [
+            "Half vegetables, a quarter starch, a quarter protein.",
+            "Starch about the size of your fist.",
+            "Ordinary local foods are enough."
+          ]
+        },
+        {
+          "id": "nu-starch",
+          "title": "Matooke, millet and other staples",
+          "summary": "Choosing and portioning starchy foods.",
+          "sections": [
+            {
+              "heading": "All staples raise sugar",
+              "body": "Starchy foods turn into sugar in the body. You can still eat them. What matters most is how much you eat, how it is prepared, and what you eat with it."
+            },
+            {
+              "heading": "Better choices",
+              "body": "• Millet and sorghum: good choices, especially whole grain. Millet bread or porridge without added sugar.\n• Matooke: a good staple in moderate portions. Steamed is better than mashed very soft. Avoid adding lots of oil.\n• Sweet potatoes, Irish potatoes and yams: boil with the skin on. Eat them warm or cooled, not fried.\n• Beans and peas with your staple slow the sugar rise.\n• Whole-maize posho (with the bran) is better than white posho."
+            },
+            {
+              "heading": "Take less often",
+              "body": "• White posho and white rice in large amounts\n• Chips, chapati, mandazi and pancakes\n• White bread and cakes\n• Very ripe sweet bananas in large amounts"
+            },
+            {
+              "heading": "Portion guide",
+              "body": "A fist-sized portion is about:\n• 2 to 3 small fingers of matooke, or\n• 1 medium sweet potato, or\n• 2 small Irish potatoes, or\n• A fist-sized piece of millet bread or posho"
+            }
+          ],
+          "keyPoints": [
+            "Keep traditional staples, in fist-sized portions.",
+            "Millet, sorghum and whole maize are better choices.",
+            "Eat staples with beans and vegetables."
+          ]
+        },
+        {
+          "id": "nu-milk-ghee",
+          "title": "Milk, ghee, eshabwe and obushera",
+          "summary": "Enjoying favourite local foods safely.",
+          "sections": [
+            {
+              "heading": "Milk",
+              "body": "Milk is a good source of protein and calcium. One to two cups a day is fine. Choose fresh or sour milk (bongo) without added sugar. Skimming the cream off boiled milk lowers the fat."
+            },
+            {
+              "heading": "Tea",
+              "body": "Many people take tea with lots of sugar. This raises your sugar quickly. Cut down step by step: from 3 spoons to 2, then 1, then none. Your taste will adjust in a few weeks."
+            },
+            {
+              "heading": "Ghee and eshabwe",
+              "body": "Eshabwe and other ghee sauces are part of our culture. Ghee is very high in saturated fat, which raises the risk of heart disease. People with diabetes already have a higher heart risk. Keep eshabwe for special occasions, in small amounts, and eat it with plenty of vegetables. Use small amounts of ghee or oil in daily cooking."
+            },
+            {
+              "heading": "Obushera and porridge",
+              "body": "Obushera (millet or sorghum drink) and porridge are good when made without added sugar or honey. Sweetened obushera raises sugar quickly. Fermented (sour) obushera is a better choice than sweetened. Keep to one cup."
+            }
+          ],
+          "keyPoints": [
+            "Milk is fine. Skip the sugar.",
+            "Cut sugar in tea gradually to zero.",
+            "Eshabwe and ghee: small amounts, special occasions."
+          ]
+        },
+        {
+          "id": "nu-protein",
+          "title": "Beans, groundnuts, fish and meat",
+          "summary": "Protein foods that support good control.",
+          "sections": [
+            {
+              "heading": "Beans and peas",
+              "body": "Beans, peas and lentils are excellent. They are cheap, filling, rich in fibre and slow the rise in sugar. Try to eat them every day."
+            },
+            {
+              "heading": "Groundnuts and simsim",
+              "body": "Groundnut sauce and simsim paste are healthy fats. They are also high in energy, so keep portions small: a few spoons of paste, or a small handful of nuts."
+            },
+            {
+              "heading": "Fish, eggs and chicken",
+              "body": "Fresh or smoked fish, including silverfish (mukene) and tilapia, are good choices. Stew or grill rather than deep fry. An egg a day is fine for most people. Remove the skin from chicken."
+            },
+            {
+              "heading": "Red meat",
+              "body": "Beef and goat are fine in small portions, about the size of your palm, a few times a week. Trim the fat. Limit sausages and processed meats."
+            }
+          ],
+          "keyPoints": [
+            "Beans and peas every day if you can.",
+            "Fish and eggs are good choices.",
+            "Small, lean portions of red meat."
+          ]
+        },
+        {
+          "id": "nu-fruit",
+          "title": "Fruit and vegetables",
+          "summary": "Fruit is allowed. Juice is different.",
+          "sections": [
+            {
+              "heading": "Vegetables",
+              "body": "Eat plenty of green leafy vegetables every day. Cook them lightly in a little water. Do not overcook. Add tomatoes and onions. Raw vegetables like cabbage salad and carrots are good too."
+            },
+            {
+              "heading": "Fruit",
+              "body": "Whole fruit has fibre and vitamins. Eat 1 to 2 portions a day, spread out. A portion is about one handful.\n• Good choices: guava, passion fruit, oranges, tangerines, apples, avocado, pawpaw\n• Small portions: mango, pineapple, jackfruit, ripe sweet bananas"
+            },
+            {
+              "heading": "Juice",
+              "body": "Juice, even fresh juice, has the fibre removed and raises sugar fast. Eat the fruit instead. Keep juice only for treating low sugar."
+            }
+          ],
+          "keyPoints": [
+            "Green vegetables every day.",
+            "1 to 2 handfuls of whole fruit a day.",
+            "Juice is for treating low sugar only."
+          ]
+        },
+        {
+          "id": "nu-drinks",
+          "title": "Drinks and alcohol",
+          "summary": "What to drink, and what to limit.",
+          "sections": [
+            {
+              "heading": "Best choices",
+              "body": "Clean, safe water is the best drink. Tea or coffee without sugar is fine. Unsweetened obushera and milk in small amounts are fine."
+            },
+            {
+              "heading": "Avoid",
+              "body": "• Soda: one 500 ml bottle has more than 10 teaspoons of sugar.\n• Packaged juices and energy drinks\n• Sweetened tea and porridge"
+            },
+            {
+              "heading": "Alcohol",
+              "body": "Local brews such as tonto, omuramba, waragi and bottled beer add sugar and energy, and can cause low sugar hours later. If you drink:\n• Drink little, and not every day\n• Eat food when you drink\n• Check your sugar before sleeping\n• Tell someone you have diabetes"
+            }
+          ],
+          "keyPoints": [
+            "Water first.",
+            "No soda or packaged juice.",
+            "Alcohol can cause late low sugar."
+          ]
+        },
+        {
+          "id": "nu-occasions",
+          "title": "Budget meals and special occasions",
+          "summary": "Eating well on a budget, and at weddings and functions.",
+          "sections": [
+            {
+              "heading": "On a budget",
+              "body": "Healthy eating does not have to cost more.\n• Grow vegetables near the house: dodo, nakati, pumpkin leaves, beans.\n• Buy foods in season.\n• Beans and silverfish are cheap, good protein.\n• Save money by cutting soda, sugar and fried snacks."
+            },
+            {
+              "heading": "At weddings, introductions and functions",
+              "body": "• Serve vegetables and protein first, then a small portion of one starch, not several.\n• Choose water instead of soda.\n• Take small amounts of eshabwe and fried foods.\n• Take your medicines as usual. If you use insulin and the meal is late, eat a small snack.\n• Check your sugar afterwards if you can."
+            }
+          ],
+          "keyPoints": [
+            "Grow vegetables and use beans and silverfish.",
+            "At functions, one small starch and vegetables first.",
+            "Keep taking your medicines."
+          ]
+        },
+        {
+          "id": "nu-sample-day",
+          "title": "A sample day of meals",
+          "summary": "One way to put it all together.",
+          "sections": [
+            {
+              "heading": "Breakfast",
+              "body": "Millet or sorghum porridge without sugar, or tea without sugar, with a boiled egg or a slice of whole-grain bread. Half an avocado."
+            },
+            {
+              "heading": "Mid-morning (if hungry)",
+              "body": "A guava or orange, or a small handful of groundnuts."
+            },
+            {
+              "heading": "Lunch",
+              "body": "Half a plate of dodo and tomatoes. A fist of steamed matooke. Beans or fish stew."
+            },
+            {
+              "heading": "Afternoon (if hungry)",
+              "body": "A cup of milk without sugar, or a piece of fruit."
+            },
+            {
+              "heading": "Supper",
+              "body": "Half a plate of cabbage and carrots. A medium sweet potato, boiled with skin. Groundnut sauce or chicken stew. A short walk after supper."
+            },
+            {
+              "heading": "Note",
+              "body": "Spread meals through the day. If you use insulin or glibenclamide, do not skip meals. A dietitian or nutritionist can adjust this plan for you."
+            }
+          ],
+          "keyPoints": [
+            "Regular meals, spread through the day.",
+            "Vegetables at lunch and supper.",
+            "No sugar in tea or porridge."
+          ]
+        }
+      ]
+    }
+  ],
+  "sources": [
+    "Ministry of Health Uganda. Uganda Clinical Guidelines 2023: sections 1.1.6 Hypoglycaemia, 8.1.3 Diabetes Mellitus, 19.1.3 Nutrition in Diabetes.",
+    "American Diabetes Association. Standards of Care in Diabetes (current edition).",
+    "Battelino T, et al. Clinical targets for continuous glucose monitoring data interpretation: recommendations from the International Consensus on Time in Range. Diabetes Care. 2019;42(8):1593-1603.",
+    "International Diabetes Federation. IDF Consensus Worldwide Definition of the Metabolic Syndrome (waist circumference cut-offs). 2006.",
+    "World Health Organization. Guidelines on physical activity and sedentary behaviour. 2020.",
+    "Uganda Diabetes Association. Public statement on traditional staple foods and diabetes. July 2025."
+  ]
+}
